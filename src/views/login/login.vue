@@ -72,7 +72,7 @@
     top: 50%;
     transform: translateY(-58%);
     -webkit-transform: translateY(-58%);
-    right: 100px;
+    right: 70px;
     width: 350px;
   }
   .login__header {
