@@ -2,7 +2,7 @@
   <el-row class="main">
     <el-card class="login__box">
       <div slot="header" class="login__header">
-        <span>卡片名称</span>
+        <span> <i class="fa fa-sign-in"></i> 欢迎登录</span>
       </div>
       <div v-for="o in 4" :key="o" class="text item">
         {{'列表内容 ' + o }}
@@ -44,13 +44,13 @@
     height: 100%;
     background-image: url('../../assets/login_bg.jpg');
     background-size: cover;
-    // background-position: 50%;
+    background-position: 50%;
   }
   .login__box {
     position: absolute;
     top: 50%;
     transform: translateY(-60%);
-    right: 160px;
+    right: 130px;
     width: 350px;
   }
   .login__header {
