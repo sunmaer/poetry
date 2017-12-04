@@ -4,9 +4,22 @@
       <div slot="header" class="login__header">
         <span> <i class="fa fa-sign-in"></i> 欢迎登录</span>
       </div>
-      <div v-for="o in 4" :key="o" class="text item">
-        {{'列表内容 ' + o }}
-      </div>
+      <el-form :model="formLabelAlign">
+        <el-form-item>
+          <el-input v-model="formLabelAlign.name" prefix-icon="fa fa-user fa-lg" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="password" v-model="formLabelAlign.region" prefix-icon="fa fa-lock fa-lg" placeholder="请输入密码"></el-input>
+        </el-form-item>
+        <el-form-item prop="type">
+          <el-checkbox-group>
+            <el-checkbox label="记住密码" name="type"></el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" class="login__button">登录</el-button>
+        </el-form-item>
+      </el-form>
     </el-card>
   </el-row>
 </template>
@@ -24,7 +37,15 @@
       fooBar: {}
     },
     // 变量
-    data () {},
+    data () {
+      return {
+        formLabelAlign: {
+          name: '',
+          region: '',
+          type: ''
+        }
+      }
+    },
     computed: {},
     // 使用其它组件
     components: {},
@@ -49,12 +70,16 @@
   .login__box {
     position: absolute;
     top: 50%;
-    transform: translateY(-60%);
-    right: 130px;
+    transform: translateY(-58%);
+    -webkit-transform: translateY(-58%);
+    right: 100px;
     width: 350px;
   }
   .login__header {
     font-weight: bold;
     text-align: left;
+  }
+  .login__button {
+    width: 100%;
   }
 </style>
