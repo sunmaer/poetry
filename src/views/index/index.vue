@@ -25,7 +25,7 @@
   .main {
     position: absolute;
     top: 60px;
+    bottom: 0;
     width: 100%;
-    height: calc(100% - 60px);
   }
 </style>
