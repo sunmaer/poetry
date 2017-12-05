@@ -4,33 +4,43 @@
       <el-radio-button :label="false">展开</el-radio-button>
       <el-radio-button :label="true">收起</el-radio-button>
     </el-radio-group> -->
-    <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
-      <el-submenu index="1">
+    <el-menu
+      default-active="1"
+      class="el-menu-vertical-demo"
+      @open="handleOpen"
+      @close="handleClose"
+      background-color="#f5f5f5"
+      text-color="#48576a"
+      active-text-color="#20a0ff">
+      <el-menu-item index="1">
+        <i class="fa fa-tachometer fa-lg"></i>
+        <span slot="title">系统首页</span>
+      </el-menu-item>
+      <el-submenu index="2">
         <template slot="title">
-          <i class="el-icon-location"></i>
-          <span slot="title">导航一</span>
+          <i class="fa fa-folder-o fa-lg"></i>
+          <span slot="title">题库管理</span>
         </template>
-        <el-menu-item-group>
-          <span slot="title">分组一</span>
-          <el-menu-item index="1-1">选项1</el-menu-item>
-          <el-menu-item index="1-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="分组2">
-          <el-menu-item index="1-3">选项3</el-menu-item>
-        </el-menu-item-group>
-        <el-submenu index="1-4">
-          <span slot="title">选项4</span>
-          <el-menu-item index="1-4-1">选项1</el-menu-item>
-        </el-submenu>
+        <el-menu-item index="2-1">题库列表</el-menu-item>
+        <el-menu-item index="2-2">增加题目</el-menu-item>
       </el-submenu>
-      <el-menu-item index="2">
-        <i class="el-icon-menu"></i>
-        <span slot="title">导航二</span>
-      </el-menu-item>
-      <el-menu-item index="3">
-        <i class="el-icon-setting"></i>
-        <span slot="title">导航三</span>
-      </el-menu-item>
+      <el-submenu index="3">
+        <template slot="title">
+          <i class="fa fa-user-o fa-lg"></i>
+          <span slot="title">学生管理</span>
+        </template>
+        <el-menu-item index="3-1">学生列表</el-menu-item>
+        <el-menu-item index="3-2">增加学生</el-menu-item>
+      </el-submenu>
+      <el-submenu index="4">
+        <template slot="title">
+          <i class="fa fa-id-card-o fa-lg"></i>
+          <span slot="title">管理员</span>
+        </template>
+        <el-menu-item index="4-1">管理员列表</el-menu-item>
+        <el-menu-item index="4-2">增加管理员</el-menu-item>
+        <el-menu-item index="4-2">个人中心</el-menu-item>
+      </el-submenu>
     </el-menu>
   </el-aside>
 </template>
@@ -56,5 +66,8 @@
 <style lang="scss" scoped>
   .el-menu-vertical-demo:not(.el-menu--collapse) {
     height: 100%;
+  }
+  .fa {
+    margin-right: 10px;
   }
 </style>
