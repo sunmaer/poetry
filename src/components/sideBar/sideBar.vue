@@ -14,7 +14,8 @@
       active-text-color="#20a0ff">
       <el-menu-item index="1">
         <i class="fa fa-tachometer fa-lg"></i>
-        <span slot="title">系统首页</span>
+        <!-- <span slot="title">系统首页</span> -->
+        <router-link to="/admin/index" class="link">系统首页</router-link>
       </el-menu-item>
       <el-submenu index="2">
         <template slot="title">
@@ -69,5 +70,10 @@
   }
   .fa {
     margin-right: 10px;
+  }
+  .link {
+    color: rgb(72, 87, 106);
+    text-decoration-line: none;
+    cursor: pointer;
   }
 </style>
