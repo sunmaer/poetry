@@ -2,7 +2,7 @@
   <el-row class="main">
     <el-card class="login__box">
       <div slot="header" class="login__header">
-        <span> <i class="fa fa-sign-in"></i> 欢迎登录</span>
+        <span> <i class="fa fa-sign-in"></i> 欢迎登录 越韵古诗</span>
       </div>
       <el-form :model="formLabelAlign">
         <el-form-item>
@@ -66,20 +66,20 @@
     background-image: url('../../assets/login_bg.jpg');
     background-size: cover;
     background-position: 50%;
-  }
-  .login__box {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-58%);
-    -webkit-transform: translateY(-58%);
-    right: 70px;
-    width: 350px;
-  }
-  .login__header {
-    font-weight: bold;
-    text-align: left;
-  }
-  .login__button {
-    width: 100%;
+    .login__box {
+      position: absolute;
+      top: 20%;
+      // transform: translateY(-56%);
+      // -webkit-transform: translateY(-56%);
+      right: 70px;
+      width: 350px;
+      .login__header {
+        font-weight: bold;
+        text-align: left;
+      }
+      .login__button {
+        width: 100%;
+      }
+    }
   }
 </style>
