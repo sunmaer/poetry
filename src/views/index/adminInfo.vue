@@ -1,6 +1,6 @@
 <template>
-  <el-card class="admin">
-    <el-row style="margin: 20px 0 30px 0;">
+  <el-card class="admin"  :body-style="{ padding: '0px 20px' }">
+    <el-row style="margin: 30px 0 30px 0;">
       <el-col :span="10" class="admin__avatar">
         <img src="https://avatars0.githubusercontent.com/u/18280125?s=460&v=4" alt="用户图像">
       </el-col>
@@ -20,7 +20,8 @@
 
 <style lang="scss" scoped>
   .admin {
-    width: 350px;
+    width: 100%;
+    height: 210px;
     color: #657180;
     box-shadow: none;
     &:hover {
@@ -37,12 +38,13 @@
     .admin__name {
       padding: 0 0 0 30px;
       line-height: 80px;
-      font-size: 25px;
+      font-size: 30px;
+      // font-weight: bold;
       color: #409EFF;
     }
     .admin__ip {
       padding: 10px 5px;
-      line-height: 30px;
+      line-height: 20px;
       border-top: 2px solid #dcdcdc;
     }
   }
