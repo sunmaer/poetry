@@ -4,8 +4,6 @@
       <span>系统信息</span>
       <el-button style="float: right; padding: 3px 0" type="text"><i class="fa fa-server"></i></el-button>
     </div>
-    <div>前端框架：Vue 2.0</div>
-    <div>后台语言：Jsp</div>
     <div>数据库：MySql</div>
     <div>服务器：Windows Server</div>
     <div>开发人员：孙梦海 曹浩</div>
@@ -18,6 +16,7 @@
 
 <style lang="scss" scoped>
   .dev {
+    height: 160px;
     color: #657180;
     box-shadow: none;
     &:hover {

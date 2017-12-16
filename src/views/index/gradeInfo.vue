@@ -4,7 +4,7 @@
       <span>成绩统计</span>
       <el-button style="float: right; padding: 3px 0" type="text"><i class="fa fa-bar-chart"></i></el-button>
     </div>
-    <div id="chartBar" style="width:100%; height:300px;"></div>
+    <div id="chartBar" style="width:100%; height:330px;"></div>
   </el-card>
 </template>
 
@@ -27,7 +27,7 @@ export default {
           }
         },
         grid: {
-          top: '20px',
+          top: '30px',
           left: '20px',
           right: '20px',
           bottom: '20px',
@@ -63,6 +63,7 @@ export default {
 
 <style lang="scss" scoped>
 .grade {
+  height: 425px;
   color: #657180;
   box-shadow: none;
   &:hover {
