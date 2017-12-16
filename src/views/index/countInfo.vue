@@ -1,13 +1,19 @@
 <template>
-  <el-card class="count"  :body-style="{ padding: '0px' }">
+  <el-card class="count" :body-style="{ padding: '0px' }">
     <el-row>
       <el-col :span="8" class="count__icon" :style="{ backgroundColor: bgColor }">
         <i :class="['fa', 'fa-'+icon, 'fa-2x']"></i>
       </el-col>
       <el-col :span="16">
-        <el-row class="count__number"  :style="{ color: bgColor }">{{ number }}</el-row>
-        <el-input v-model="input" placeholder="请输入内容"></el-input>
-        <el-row class="count__types">{{ type }}<a v-if="update" class="count__btn" href="javascript:void(0);">修改</a></el-row>
+        <el-row v-if="input" class="count__input"><el-input v-model="number" placeholder="请输入"></el-input></el-row>
+        <el-row v-else class="count__number" :style="{ color: bgColor }">{{ number }}</el-row>
+        <el-row class="count__types">
+          {{ type }}
+          <span v-if="update">
+            <a v-if="link" @click="alter" class="count__btn" href="javascript:void(0);">{{ btnName }}</a>
+            <a v-else @click="confirm" class="count__btn" href="javascript:void(0);">{{ btnName }}</a>
+          </span>
+        </el-row>
       </el-col>
     </el-row>
   </el-card>
@@ -40,7 +46,21 @@
     },
     data () {
       return {
-
+        input: false,
+        btnName: '修改',
+        link: true
+      }
+    },
+    methods: {
+      alter () {
+        this.input = !this.input
+        this.btnName = '确认'
+        this.link = !this.link
+      },
+      confirm () {
+        this.input = !this.input
+        this.btnName = '修改'
+        this.link = !this.link
       }
     }
   }
@@ -69,10 +89,12 @@
       font-size: 30px;
       font-weight: bold;
     }
+    .count__input {
+      margin: 35px 25px 7px 25px;
+    }
     .count__types {
       color: #c8c8c8;
       .count__btn {
-        margin-left: 5px;
         color: #409EFF;
         text-decoration: none;
       }
