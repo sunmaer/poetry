@@ -13,7 +13,7 @@
       <count-info bgColor="#EB9E05" icon="edit" number="250" type="题目总数" ></count-info>
     </el-col>
     <el-col :span="15" class="col col__right">
-      <dev-info></dev-info>
+      <grade-info></grade-info>
     </el-col>
     <el-col :span="9" class="col">
       <dev-info></dev-info>
@@ -25,12 +25,14 @@
   import AdminInfo from '../../views/index/adminInfo'
   import CountInfo from '../../views/index/countInfo'
   import DevInfo from '../../views/index/devInfo'
+  import GradeInfo from '../../views/index/gradeInfo'
 
   export default {
     components: {
       AdminInfo,
       CountInfo,
-      DevInfo
+      DevInfo,
+      GradeInfo
     }
   }
 </script>
