@@ -36,7 +36,7 @@
     bottom: 0;
     width: 100%;
     .main__bread {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
   }
 </style>

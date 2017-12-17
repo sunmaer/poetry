@@ -9,15 +9,15 @@
 </template>
 
 <script>
-import echarts from "echarts";
+import echarts from 'echarts'
 
 export default {
-  data() {
-    return {};
+  data () {
+    return {}
   },
   methods: {
-    drawChart() {
-      this.chartBar = echarts.init(document.getElementById('chartBar'));
+    drawChart () {
+      this.chartBar = echarts.init(document.getElementById('chartBar'))
       this.chartBar.setOption({
         color: ['#3398DB'],
         tooltip: {

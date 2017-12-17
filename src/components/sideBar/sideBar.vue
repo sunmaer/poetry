@@ -5,25 +5,27 @@
       <el-radio-button :label="true">收起</el-radio-button>
     </el-radio-group> -->
     <el-menu
-      default-active="1"
+      default-active="index"
       class="el-menu-vertical-demo"
       @open="handleOpen"
       @close="handleClose"
-      background-color="#f5f5f5"
+      background-color="#eef1f6"
       text-color="#48576a"
+      :router="true"
       active-text-color="#20a0ff">
-      <el-menu-item index="1">
+      <el-menu-item index="index">
         <i class="fa fa-tachometer fa-lg"></i>
-        <!-- <span slot="title">系统首页</span> -->
-        <router-link to="/admin/index" class="link">系统首页</router-link>
+        <span slot="title">系统首页</span>
       </el-menu-item>
-      <el-submenu index="2">
+      <el-submenu index="questionManage">
         <template slot="title">
           <i class="fa fa-folder-o fa-lg"></i>
           <span slot="title">题库管理</span>
         </template>
-        <el-menu-item index="2-1">题库列表</el-menu-item>
-        <el-menu-item index="2-2">增加题目</el-menu-item>
+        <el-menu-item index="question">
+          <span slot="title">题目列表</span>
+        </el-menu-item>
+        <!-- <el-menu-item index="2-2">增加题目</el-menu-item> -->
       </el-submenu>
       <el-submenu index="3">
         <template slot="title">
@@ -70,10 +72,5 @@
   }
   .fa {
     margin-right: 10px;
-  }
-  .link {
-    color: rgb(72, 87, 106);
-    text-decoration-line: none;
-    cursor: pointer;
   }
 </style>

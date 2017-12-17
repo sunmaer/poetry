@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from '@/views/login/login'
 import Admin from '@/views/admin/admin'
 import Index from '@/views/index/index'
+import Question from '@/views/question/question'
 
 Vue.use(Router)
 
@@ -25,7 +26,8 @@ export default new Router({
       component: Admin,
       children: [
         { path: '', component: Index },
-        { path: 'index', component: Index }
+        { path: 'index', component: Index },
+        { path: 'question', component: Question }
       ]
     }
   ]
