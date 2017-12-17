@@ -68,7 +68,7 @@
 
 <script>
   export default {
-    data() {
+    data () {
       return {
         formInline: {
           user: '',
