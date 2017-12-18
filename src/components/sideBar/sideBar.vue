@@ -27,22 +27,20 @@
         </el-menu-item>
         <!-- <el-menu-item index="2-2">增加题目</el-menu-item> -->
       </el-submenu>
-      <el-submenu index="3">
+      <el-submenu index="studentManage">
         <template slot="title">
           <i class="fa fa-user-o fa-lg"></i>
           <span slot="title">学生管理</span>
         </template>
-        <el-menu-item index="3-1">学生列表</el-menu-item>
-        <el-menu-item index="3-2">增加学生</el-menu-item>
+        <el-menu-item index="student">学生列表</el-menu-item>
       </el-submenu>
-      <el-submenu index="4">
+      <el-submenu index="adminManage">
         <template slot="title">
           <i class="fa fa-id-card-o fa-lg"></i>
           <span slot="title">管理员</span>
         </template>
-        <el-menu-item index="4-1">管理员列表</el-menu-item>
-        <el-menu-item index="4-2">增加管理员</el-menu-item>
-        <el-menu-item index="4-2">个人中心</el-menu-item>
+        <el-menu-item index="administor">管理员列表</el-menu-item>
+        <el-menu-item index="self">个人中心</el-menu-item>
       </el-submenu>
     </el-menu>
   </el-aside>
