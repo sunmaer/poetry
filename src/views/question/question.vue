@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-form :inline="true" :model="formInline" class="question__form">
+    <el-form :inline="true" :model="formInline" size="small" class="question__form">
       <el-form-item class="form__item">
         <el-input v-model="formInline.user" placeholder="题目名称"></el-input>
       </el-form-item>
@@ -9,6 +9,7 @@
         <el-button type="primary" @click="onSubmit">新增</el-button>
       </el-form-item>
     </el-form>
+
     <el-table
       ref="multipleTable"
       :data="tableData3"
@@ -53,16 +54,23 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="1"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="400"
-      class="question__page">
-    </el-pagination>
+    <el-row class="question__footer">
+      <el-button
+        size="small"
+        type="danger"
+        @click="handleDelete(scope.$index, scope.row)">批量删除</el-button>
+      <el-pagination
+        @size-change="handleSizeChange"
+        background
+        @current-change="handleCurrentChange"
+        :current-page="1"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="10"
+        layout="total, sizes, prev, pager, next"
+        :total="40"
+        class="question__page">
+      </el-pagination>
+    </el-row>
   </el-row>
 </template>
 
@@ -129,8 +137,12 @@
       margin-bottom: 0px;
     }
   }
+  .question__footer {
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #eef1f6;
+  }
   .question__page {
-    margin: 15px 0 0 0;
-    text-align: right;
+    float: right;
   }
 </style>
