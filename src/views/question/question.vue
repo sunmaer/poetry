@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item class="form__item">
         <el-button type="primary" @click="onSubmit">查询</el-button>
-        <el-button type="primary" @click="onSubmit">新增</el-button>
+        <el-button type="primary" @click="addDialogVisible = true">新增</el-button>
       </el-form-item>
     </el-form>
 
@@ -71,6 +71,55 @@
         class="question__page">
       </el-pagination>
     </el-row>
+
+    <!-- 新增界面 -->
+    <el-dialog
+      title="添加题目"
+      :visible.sync="addDialogVisible"
+      width="50%">
+      <el-form ref="form" :model="form" label-width="70px" label-position="right">
+        <el-form-item label="题目类型">
+          <el-select v-model="form.region" placeholder="请选择题目类型">
+            <el-option label="选择题" value="shanghai"></el-option>
+            <el-option label="判断题" value="beijing"></el-option>
+            <el-option label="欣赏题" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="题目内容">
+          <el-input type="textarea" :autosize="{ minRows: 3}" v-model="form.desc"></el-input>
+        </el-form-item>
+        <el-form-item label="选项 A">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="选项 B">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="选项 C">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="选项 D">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="题目附件">
+          <el-upload
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            multiple
+            :limit="3"
+            :on-exceed="handleExceed"
+            :file-list="fileList">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="addDialogVisible = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="addDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </el-row>
 </template>
 
@@ -78,9 +127,20 @@
   export default {
     data () {
       return {
+        addDialogVisible: false,
         formInline: {
           user: '',
           region: ''
+        },
+        form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
         },
         tableData3: [{
           type: '选择题',
@@ -123,6 +183,15 @@
           content: '像我这样优秀的人，本该灿烂过一生，怎么二十多年到头来，还在人海里浮沉',
           answer: 'A'
         }]
+      }
+    },
+    methods: {
+      handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
       }
     }
   }
