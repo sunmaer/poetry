@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Home from '@/views/home/home'
 import Login from '@/views/login/login'
 import Admin from '@/views/admin/admin'
 import Index from '@/views/index/index'
@@ -13,13 +13,15 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '/test',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
+    // 前台页面
     {
       path: '/',
+      name: 'Home',
+      component: Home
+    },
+    // 后台页面
+    {
+      path: '/login',
       name: 'Login',
       component: Login
     },
