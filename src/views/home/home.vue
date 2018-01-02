@@ -2,11 +2,55 @@
   <el-row class="home">
     <el-row class="home__container">
       <el-col span="12" class="home__link"><a href="http://www.szchengnan.com/" target="_blank">嵊州市城南小学欢迎你</a></el-col>
-      <el-col span="12" class="home__test"><a href="">{{ type }}在线测试 <i class="fa fa-arrow-circle-o-right"></i></a></el-col>
+      <el-col span="12" class="home__test"><a href="javascript:void(0);" @click="dialogVisible = true">{{ type }}在线测试 <i class="fa fa-arrow-circle-o-right"></i></a></el-col>
       <el-col span="24">
         <img class="home__logo" src="../../assets/logo.jpg" alt="校园全景">
       </el-col>
     </el-row>
+
+    <el-dialog
+      title="选择题量"
+      :visible.sync="dialogVisible"
+      width="30%">
+      <span>总题数：<strong>{{ number }}</strong></span>
+      <el-row class="test__num">
+        <span>选择题：</span>
+        <el-input-number 
+          v-model="num1" 
+          @change="handleChange" 
+          :min="0" 
+          :max="number"
+          size="small" 
+          label="选择题"></el-input-number>
+      </el-row>
+
+      <el-row class="test__num">
+        <span>判断题：</span>
+        <el-input-number 
+          v-model="num1" 
+          @change="handleChange" 
+          :min="0" 
+          :max="number"
+          size="small" 
+          label="判断题"></el-input-number>
+      </el-row>
+
+      <el-row class="test__num">
+        <span>欣赏题：</span>
+        <el-input-number 
+          v-model="num1" 
+          @change="handleChange" 
+          :min="0" 
+          :max="number"
+          size="small" 
+          label="欣赏题"></el-input-number>
+      </el-row>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </el-row>
 </template>
 
@@ -14,7 +58,10 @@
   export default {
     data () {
       return {
-        type: '越韵古诗'
+        type: '越韵古诗',
+        dialogVisible: false,
+        number: 50,
+        num1: 0
       }
     }
   }
@@ -33,8 +80,8 @@
     }
     .home__link {
       padding: 20px 10px;
-      height: 160px;
-      line-height: 160px;
+      height: 200px;
+      line-height: 200px;
       a {
         font-size: 28px;
         color: #000;
@@ -43,7 +90,7 @@
     }
     .home__test {
       position: relative;
-      height: 160px;
+      height: 200px;
       a {
         position: absolute;
         right: 10px;
@@ -57,9 +104,12 @@
       }
     }
     .home__logo {
-      margin-top: 20px;
+      margin-top: 40px;
       width: 100%;
       box-shadow: 7px 7px 10px #888888;
+    }
+    .test__num {
+      margin-top: 15px;
     }
   }
 </style>
