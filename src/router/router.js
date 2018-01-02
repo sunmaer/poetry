@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/home/home'
+import Test from '@/views/test/test'
 import Login from '@/views/login/login'
 import Admin from '@/views/admin/admin'
 import Index from '@/views/index/index'
@@ -18,6 +19,11 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home
+    },
+    {
+      path: '/test',
+      name: 'Test',
+      component: Test
     },
     // 后台页面
     {
