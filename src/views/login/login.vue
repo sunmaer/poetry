@@ -17,7 +17,7 @@
           </el-checkbox-group>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="login__button">登录</el-button>
+          <el-button type="primary" class="login__button" @click="login">登录</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -25,6 +25,7 @@
 </template>
 
 <script type="text/javascript">
+  import router from '../../router/router'
   export default {
     // 不要忘记了 name 属性
     name: 'RangeSlider',
@@ -51,7 +52,11 @@
     components: {},
     // 方法
     watch: {},
-    methods: {},
+    methods: {
+      login () {
+        router.push({ path: '/admin' })
+      }
+    },
     // 生命周期函数
     beforeCreate () {},
     mounted () {}

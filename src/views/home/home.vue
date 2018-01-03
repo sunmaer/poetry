@@ -2,7 +2,10 @@
   <el-row class="home">
     <el-row class="home__container">
       <el-col span="12" class="home__link"><a href="http://www.szchengnan.com/" target="_blank">嵊州市城南小学欢迎你</a></el-col>
-      <el-col span="12" class="home__test"><a href="javascript:void(0);" @click="dialogVisible = true">{{ type }}在线测试 <i class="fa fa-arrow-circle-o-right"></i></a></el-col>
+      <el-col span="12" class="home__test">
+        <router-link :to="{ path: '/login' }">管理员登录</router-link>&nbsp;&nbsp;
+        <a href="javascript:void(0);" @click="dialogVisible = true">{{ type }}在线测试 <i class="fa fa-arrow-circle-o-right"></i></a>
+      </el-col>
       <el-col span="24">
         <img class="home__logo" src="../../assets/logo.jpg" alt="校园全景">
       </el-col>
@@ -48,13 +51,15 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="confirm">确 定</el-button>
       </span>
     </el-dialog>
   </el-row>
 </template>
 
 <script>
+  import router from '../../router/router'
+
   export default {
     data () {
       return {
@@ -62,6 +67,12 @@
         dialogVisible: false,
         number: 50,
         num1: 0
+      }
+    },
+    methods: {
+      confirm () {
+        this.dialogVisible = false,
+        router.push({ path: 'test' })
       }
     }
   }
@@ -91,10 +102,10 @@
     .home__test {
       position: relative;
       height: 200px;
+      text-align: right;
       a {
-        position: absolute;
-        right: 10px;
-        bottom: 0px;
+        position: relative;
+        top: 190px;
         font-size: 18px;
         color: #000;
         text-decoration: none;
