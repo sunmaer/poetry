@@ -126,7 +126,7 @@ export default {
       for(var i=0;i<answers.length;i++){
         console.log(answers[i]);
       }
-      axios.post('http://localhost:7001/poetry/grade',{
+      axios.post(API_HOST+'Poetry/Grade',{
             id:this.id,
             answer:answers
           })

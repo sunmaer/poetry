@@ -40,7 +40,7 @@
         label="展开成绩"
         width="100">
         <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand" v-for="(grade,index) in props.row.grade">
+          <el-form label-position="left" inline class="demo-table-expand" :key="index" v-for="(grade,index) in props.row.grade">
             <el-form-item>
               <span>第{{ grade[2] }}次测验</span>
             </el-form-item>

@@ -281,17 +281,19 @@
           this.loginForm.classAlert = '';
           this.loginForm.idAlert = '';
           //向后端发送数据
+          let self = this;
           axios.post(API_HOST+'Login',{
             name:this.loginForm.name,
             class:this.loginForm.class,
             id:this.loginForm.id
           })
           .then(function(res){
-            console.log(res);
+            res = res.data;
+            console.log(res)
             if(res.status == true){
-              localStorage.name = this.loginForm.name;
-              localStorage.class = this.loginForm.class;
-              localStorage.id = this.loginForm.id;
+              localStorage.name = self.loginForm.name;
+              localStorage.class = self.loginForm.class;
+              localStorage.id = self.loginForm.id;
               alert("登录成功");
               router.push({ path: '/' });
             }
@@ -335,15 +337,17 @@
           this.registerForm.classAlert = '';
           this.registerForm.idAlert = '';
           //向后端发送数据
+          let self = this;
           axios.post(API_HOST+'Reg',{
             name:this.registerForm.name,
             class:this.registerForm.class,
             id:this.registerForm.id
           })
           .then(function(res){
+            res = res.data;
             console.log(res);
             if(res.status == true){
-              localStorage.name = this.registerForm.name;
+              localStorage.name = self.registerForm.name;
               alert("注册成功");
               router.push({ path: '/test' });
             }
@@ -353,6 +357,9 @@
             alert("注册失败，可能信息已被注册");
           });
         }
+      },
+      handleChange () {
+
       }
     },
     //页面加载读取题目数量

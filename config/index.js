@@ -2,12 +2,8 @@
 // Template version: 1.2.4
 // see http://vuejs-templates.github.io/webpack for documentation.
 
-<<<<<<< HEAD
 const path = require('path');
 var proxyConfig = require('./proxyConfig');
-=======
-const path = require('path')
->>>>>>> 86591e3646b79c3d1d13f83e62c4df2f80895797
 
 module.exports = {
   dev: {
@@ -15,11 +11,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-<<<<<<< HEAD
     proxyTable: proxyConfig.proxy, //解决跨域请求
-=======
-    proxyTable: {},
->>>>>>> 86591e3646b79c3d1d13f83e62c4df2f80895797
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
