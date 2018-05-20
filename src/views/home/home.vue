@@ -141,9 +141,9 @@
         type: '越韵古诗',
         dialogVisible: false,
         number: 50,
-        num1: 0,
-        num2: 0,
-        num3: 0
+        num1: 1,
+        num2: 6,
+        num3: 1
       }
     },
     computed:{
@@ -199,10 +199,11 @@
       },
     ], // 欣赏题
   }});
-        if(this.num1+this.num2+this.num3 != this.number){
-          alert('题目数不符合要求');
-          return;
-        }
+        // if(this.num1+this.num2+this.num3 != this.number){
+        //   alert('题目数不符合要求');
+        //   return;
+        // }
+        axios.defaults.withCredentials = true;
         axios.post(API_HOST+'Poetry/Library',{
           num:[this.num1,this.num2,this.num3]
         })
@@ -364,10 +365,12 @@
     },
     //页面加载读取题目数量
     mounted () {
+      var self = this;
       axios.get(API_HOST+'Global/QuestionNum')
       .then(function(res){
+        res = res.data;
         if(res.status == true){
-          this.number = parseInt(res.questionNum);
+          self.number = parseInt(res.questionNum);
         }
       });
       this.num1 = Math.ceil(this.number*0.75);
