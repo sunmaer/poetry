@@ -2,8 +2,55 @@
   <el-row class="test">
     <el-row class="container">
       <h1>越韵古诗测试试卷
-        <a href="#">当前用户:{{username}}</a>
+        <a href="javascript:void(0);" @click="LoginVisible = true">学生登录/注册</a>
       </h1>
+
+      <el-dialog
+      title="登录/注册"
+      :visible.sync="LoginVisible"
+      width="25%">
+      <el-tabs type="card">
+        <el-tab-pane label="学生登录">
+          <el-form ref="form" :model="loginForm" label-width="60px">
+            <el-form-item label="姓名">
+              <el-input v-model="loginForm.name" placeholder="请输入姓名"></el-input>
+              <el-alert v-model="loginForm.nameAlert" v-if="loginForm.nameAlert!==''" type="warning" :closable="false">{{loginForm.nameAlert}}</el-alert>
+            </el-form-item>
+            <el-form-item label="班级">
+              <el-input v-model="loginForm.class" placeholder="请输入班级"></el-input>
+              <el-alert v-model="loginForm.classAlert" v-if="loginForm.classAlert!==''" type="warning" :closable="false">{{loginForm.classAlert}}</el-alert>
+            </el-form-item>
+            <el-form-item label="学号">
+              <el-input v-model="loginForm.id" placeholder="请输入学号"></el-input>
+              <el-alert v-model="loginForm.idAlert" v-if="loginForm.idAlert!==''" type="warning" :closable="false">{{loginForm.idAlert}}</el-alert>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="StudentLogin('loginForm')">登录</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="学生注册">
+          <el-form ref="form" :model="registerForm" label-width="60px">
+            <el-form-item label="姓名">
+              <el-input v-model="registerForm.name" placeholder="请输入姓名"></el-input>
+              <el-alert v-model="registerForm.nameAlert" v-if="registerForm.nameAlert!==''" type="warning" :closable="false">{{registerForm.nameAlert}}</el-alert>
+            </el-form-item>
+            <el-form-item label="班级">
+              <el-input v-model="registerForm.class" placeholder="请输入班级 格式3-2 为3年2班"></el-input>
+              <el-alert v-model="registerForm.classAlert" v-if="registerForm.classAlert!==''" type="warning" :closable="false">{{registerForm.classAlert}}</el-alert>
+
+            </el-form-item>
+            <el-form-item label="学号">
+              <el-input v-model="registerForm.id" placeholder="请输入学号"></el-input>
+              <el-alert v-model="registerForm.ideAlert" v-if="registerForm.idAlert!==''" type="warning" :closable="false">{{registerForm.idAlert}}</el-alert>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="StudentRegister">注册</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
 
       <el-row class="test__question">
         <section>
@@ -49,6 +96,9 @@
         </el-row>
       </el-row>
     </el-row>
+
+    
+
   </el-row>
 </template>
 
@@ -61,6 +111,24 @@ export default {
       fontcolor0:{
         color:'red'
       },
+      loginForm:{
+        name:'',
+        class:'',
+        id:'',
+        nameAlert:'',
+        classAlert:'',
+        idAlert:'',
+        error:''
+      },
+      registerForm:{
+        name:'',
+        class:'',
+        id:'',
+        nameAlert:'',
+        classAlert:'',
+        idAlert:''
+      },
+      LoginVisible: false,
       username:'',
       id:'',
       choiceradio:[],
