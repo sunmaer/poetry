@@ -5,11 +5,56 @@
         <a href="javascript:void(0);" @click="LoginVisible = true">学生登录/注册</a>
       </h1>
 
-      <el-dialog
-      title="登录/注册"
+      <el-row class="test__question">
+        <section>
+          <h3>一、选择题（共5题，每题5分。每题只有一个答案是正确的，请从四个备选答案中选出正确选项）</h3>
+          <el-row v-for="(choice,index) in choices" :key="index" class="question__item">
+            <h4  :id="'choiceOrder'+index">{{index+1}}.{{choice.question}}</h4>
+            <el-radio-group v-model="choiceradio[index]" class="item" >
+              <el-radio label="1">{{choice.option[0]}}</el-radio>
+              <el-radio label="2">{{choice.option[1]}}</el-radio>
+              <el-radio label="3">{{choice.option[2]}}</el-radio>
+              <el-radio label="4">{{choice.option[3]}}</el-radio>
+            </el-radio-group>
+          </el-row>
+        </section>
+
+        <section>
+          <h3>二、判断题（共5题，每题5分。请根据题目内容选择正确或者错误）</h3>
+          <el-row v-for="(judge,index) in judges" :key="index" class="question__item">
+            <h4 :id="'judgeOrder'+index">{{index+1}}. {{judge.question}}</h4>
+            <el-radio-group v-model="judgeradio[index]" class="item">
+              <el-radio label="1">正确</el-radio>
+              <el-radio label="0">错误</el-radio>
+            </el-radio-group>
+          </el-row>
+        </section>
+
+        <section>
+          <h3>三、欣赏题（共5题，每题5分。请欣赏完作品后完成选项，每题只有一个答案是正确的，请从四个备选答案中选出正确选项）</h3>
+          <el-row v-for="(admiring,index) in admirings" :key="index" class="question__item">
+            <h4 :id="'admiringOrder'+index">{{index+1}}.{{admiring.question}}</h4>
+            <el-radio-group v-model="admiringradio[index]" class="item">
+              <el-radio :label="1">{{admiring.option[0]}}</el-radio>
+              <el-radio :label="2">{{admiring.option[1]}}</el-radio>
+              <el-radio :label="3">{{admiring.option[2]}}</el-radio>
+              <el-radio :label="4">{{admiring.option[3]}}</el-radio>
+            </el-radio-group>
+          </el-row>
+        </section>
+
+        <el-row  class="test__handle">
+          <el-button type="primary" @click="submit">提交试卷</el-button>
+        </el-row>
+      </el-row>
+    </el-row>
+    
+    <el-dialog
+      title="学生登录/注册"
       :visible.sync="LoginVisible"
-      width="25%">
-      <el-tabs type="card">
+      center
+      width="40%">
+      <el-tabs>
         <el-tab-pane label="学生登录">
           <el-form ref="form" :model="loginForm" label-width="60px">
             <el-form-item label="姓名">
@@ -51,66 +96,14 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
-
-      <el-row class="test__question">
-        <section>
-          <h3>一、选择题（共5题，每题5分。每题只有一个答案是正确的，请从四个备选答案中选出正确选项）</h3>
-          <el-row v-for="(choice,index) in choices" :key="index" class="question__item">
-            <h4  :id="'choiceOrder'+index">{{index+1}}.{{choice.question}}</h4>
-            <el-radio-group v-model="choiceradio[index]" class="item" >
-              <el-radio label="1">{{choice.option[0]}}</el-radio>
-              <el-radio label="2">{{choice.option[1]}}</el-radio>
-              <el-radio label="3">{{choice.option[2]}}</el-radio>
-              <el-radio label="4">{{choice.option[3]}}</el-radio>
-            </el-radio-group>
-          </el-row>
-        </section>
-
-        <section>
-          <h3>二、判断题（共5题，每题5分。请根据题目内容选择正确或者错误）</h3>
-          <el-row v-for="(judge,index) in judges" :key="index" class="question__item">
-            <h4 :id="'judgeOrder'+index">{{index+1}}. {{judge.question}}</h4>
-            <el-radio-group v-model="judgeradio[index]" class="item">
-              <el-radio label="1">正确</el-radio>
-              <el-radio label="0">错误</el-radio>
-            </el-radio-group>
-          </el-row>
-        </section>
-
-        <section>
-          <h3>三、欣赏题（共5题，每题5分。请欣赏完作品后完成选项，每题只有一个答案是正确的，请从四个备选答案中选出正确选项）</h3>
-          <el-row v-for="(admiring,index) in admirings" :key="index" class="question__item">
-            <h4 :id="'admiringOrder'+index">{{index+1}}.{{admiring.question}}</h4>
-            <el-radio-group v-model="admiringradio[index]" class="item">
-              <el-radio :label="1">{{admiring.option[0]}}</el-radio>
-              <el-radio :label="2">{{admiring.option[1]}}</el-radio>
-              <el-radio :label="3">{{admiring.option[2]}}</el-radio>
-              <el-radio :label="4">{{admiring.option[3]}}</el-radio>
-            </el-radio-group>
-          </el-row>
-
-        </section>
-
-        <el-row  class="test__handle">
-          <el-button type="primary" @click="submit">提交试卷</el-button>
-        </el-row>
-      </el-row>
-    </el-row>
-
-    
-
   </el-row>
 </template>
 
 <script>
-import router from '../../router/router'
 import axios from 'axios'
 export default {
   data () {
     return {
-      fontcolor0:{
-        color:'red'
-      },
       loginForm:{
         name:'',
         class:'',
@@ -132,11 +125,19 @@ export default {
       username:'',
       id:'',
       choiceradio:[],
+      choiceNum: 0,
       judgeradio:[],
-      admiringradio:[]
+      judgeNum: 0,
+      admiringradio:[],
+      admiringNum: 0,
     }
   },
   created:function(){
+    // 获取各类题目数量
+    this.choiceNum = this.$route.query.choiceNum || 0
+    this.judgeNum = this.$route.query.judgeNum || 0
+    this.admiringNum = this.$route.query.admiringNum
+
     for(var i=0;i<this.choices.length;i++){
       this.choiceradio[i] = 'choiceradio' + i;
     }
@@ -145,26 +146,6 @@ export default {
     }
     for(var i=0;i<this.admirings.length;i++){
       this.admiringradio[i] = 'admiringradio' + i;
-    }
-  },
-  computed:{
-    choices:function(){
-      if(sessionStorage.getItem('choice') == null){
-        return this.$route.params.choice;
-      }
-      return JSON.parse(sessionStorage.getItem('choice'));
-    },
-    judges:function(){
-      if(sessionStorage.getItem('judge') == null){
-        return this.$route.params.judge;
-      }
-      return JSON.parse(sessionStorage.getItem('judge'));
-    },
-    admirings:function(){
-      if(sessionStorage.getItem('admiring') == null){
-        return this.$route.params.admiring;
-      }
-      return JSON.parse(sessionStorage.getItem('admiring'));
     }
   },
   methods:{
@@ -237,27 +218,13 @@ export default {
             alert("提交失败，请检查信息");
           });
     },
-  },
-  mounted () {
-    console.log(sessionStorage);
-    if(sessionStorage.getItem('chocie') == null){
-      var choicestr = JSON.stringify(this.$route.params.choice);
-      var judgestr = JSON.stringify(this.$route.params.judge);
-      var admiringstr = JSON.stringify(this.$route.params.admiring);
-      sessionStorage.setItem("choice",choicestr);
-      sessionStorage.setItem("judge",judgestr);
-      sessionStorage.setItem("admiring",admiringstr);
-      console.log(sessionStorage);
-    }
-    this.username = 'a';
-    this.id = '1';
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .test {
-    position: fixed;
+    position: absolute;
     overflow: auto;
     width: 100%;
     height: 100%;
