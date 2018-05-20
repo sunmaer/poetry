@@ -4,8 +4,7 @@
       <el-col span="12" class="home__link"><a href="http://www.szchengnan.com/" target="_blank">嵊州市城南小学欢迎你</a></el-col>
       <el-col span="12" class="home__test">
         <router-link :to="{ path: '/login' }">管理员登录</router-link>&nbsp;&nbsp;
-        <a href="javascript:void(0);" @click="LoginVisible = true">学生登录</a>&nbsp;&nbsp;
-        <a href="javascript:void(0);" @click="dialogVisible = true" v-if="isLogin">{{ type }}在线测试 <i class="fa fa-arrow-circle-o-right"></i></a>
+        <a href="javascript:void(0);" @click="dialogVisible = true">{{ type }}在线测试 <i class="fa fa-arrow-circle-o-right"></i></a>
       </el-col>
       <el-col span="24">
         <img class="home__logo" src="../../assets/logo.jpg" alt="校园全景">
@@ -107,7 +106,6 @@
 </template>
 
 <script>
-  import router from '../../router/router'
   import axios from 'axios'
 
   export default {
@@ -141,9 +139,9 @@
         type: '越韵古诗',
         dialogVisible: false,
         number: 50,
-        num1: 1,
-        num2: 6,
-        num3: 1
+        num1: 10,
+        num2: 10,
+        num3: 10
       }
     },
     computed:{
@@ -158,209 +156,14 @@
     },
     methods: {
       confirm () {
-        router.push({ name: 'Test',params:{
-    choice: [
-      {
-        id: 1,
-        question: "1+1=?",
-        option: [
-          '2', '3', '4', '5'
-        ],
-        analysis: '简单的运算',
-        image: 'www.baidu.com', //可选
-      },
-      {
-        id: 2,
-        question: "1+1=?",
-        option: [
-          '2', '3', '4', '5'
-        ],
-        analysis: '简单的运算',
-        image: 'www.baidu.com', //可选
-      },
-    ], // 选择题
-    judge: [
-      {
-        id: 1,
-        question: "1+1=2",
-        analysis: '简单的运算',
-        image: 'www.baidu.com', //可选
-      },
-    ],// 判断题
-    admiring: [
-      {
-        id: 1,
-        question: "1+1=?",
-        option: [
-          '2', '3', '4', '5'
-        ],
-        analysis: '简单的运算',
-        video: 'www.baidu.com', //可选
-      },
-    ], // 欣赏题
-  }});
-        // if(this.num1+this.num2+this.num3 != this.number){
-        //   alert('题目数不符合要求');
-        //   return;
-        // }
-        axios.defaults.withCredentials = true;
-        axios.post(API_HOST+'Poetry/Library',{
-          num:[this.num1,this.num2,this.num3]
-        })
-        .then(function(res){
-          console.log(res);
-          if(res.status == true){
-            router.push({ name: 'Test ',params:{
-    choice: [
-      {
-        id: 1,
-        question: "1+1=?",
-        option: [
-          '2', '3', '4', '5'
-        ],
-        analysis: '简单的运算',
-        image: 'www.baidu.com', //可选
-      },
-    ], // 选择题
-    judge: [
-      {
-        id: 1,
-        question: "1+1=2",
-        analysis: '简单的运算',
-        image: 'www.baidu.com', //可选
-      },
-    ],// 判断题
-    admiring: [
-      {
-        id: 1,
-        question: "1+1=?",
-        option: [
-          '2', '3', '4', '5'
-        ],
-        analysis: '简单的运算',
-        video: 'www.baidu.com', //可选
-      },
-    ], // 欣赏题
-  }});
-          }
-        })
-        .catch(function(err){
-            console.log(err);
-            alert("提交失败，请检查信息");
-            
-        });
-      },
-      StudentLogin(formName){
-        //登录字符验证
-        var passed = true;
-        var reg = /[0-9]-[0-9]/;
-        if(this.loginForm.name == ''){
-          this.loginForm.nameAlert = '用户名不能为空';
-          passed = false;
-        }else if(this.loginForm.name != ''){
-          this.loginForm.nameAlert = '';
-        }
-        if(this.loginForm.class == ''){
-          this.loginForm.classAlert = '班级不能为空';
-          passed = false;
-        }else if(!reg.test(this.loginForm.class)){
-          this.loginForm.classAlert = '班级格式错误';
-          passed = false;
-        }else if(this.loginForm.class != '' && reg.test(this.loginForm.class)){
-          this.loginForm.classAlert = '';
-        }
-        if(this.loginForm.id == ''){
-          this.loginForm.idAlert = '学号不能为空';
-          passed = false;
-        }else if(this.loginForm.id != ''){
-          this.loginForm.idAlert = '';
-        }
-        if(!passed){
-          return;
-        }else{
-          this.loginForm.nameAlert = '';
-          this.loginForm.classAlert = '';
-          this.loginForm.idAlert = '';
-          //向后端发送数据
-          let self = this;
-          axios.post(API_HOST+'Login',{
-            name:this.loginForm.name,
-            class:this.loginForm.class,
-            id:this.loginForm.id
-          })
-          .then(function(res){
-            res = res.data;
-            console.log(res)
-            if(res.status == true){
-              localStorage.name = self.loginForm.name;
-              localStorage.class = self.loginForm.class;
-              localStorage.id = self.loginForm.id;
-              alert("登录成功");
-              router.push({ path: '/' });
-            }
-            
-          })
-          .catch(function(err){
-            console.log(err);
-            alert("登录失败，请检查登录信息");
+        if(this.num1+this.num2+this.num3 != this.number){
+          this.$message({
+            message:'题目数不符合要求',
+            type:'warning'
           });
-
+          return false;
         }
-      },
-      StudentRegister(){
-        var passed = true;
-        var reg = /[0-9]-[0-9]/;
-        if(this.registerForm.name == ''){
-          this.registerForm.nameAlert = '用户名不能为空';
-          passed = false;
-        }else if(this.registerForm.name != ''){
-          this.registerForm.nameAlert = '';
-        }
-        if(this.registerForm.class == ''){
-          this.registerForm.classAlert = '班级不能为空';
-          passed = false;
-        }else if(!reg.test(this.registerForm.class)){
-          this.registerForm.classAlert = '班级格式错误';
-          passed = false;
-        }else if(this.registerForm.class != '' && reg.test(this.registerForm.class)){
-          this.registerForm.classAlert = '';
-        }
-        if(this.registerForm.id == ''){
-          this.registerForm.idAlert = '学号不能为空';
-          passed = false;
-        }else if(this.registerForm.id != ''){
-          this.registerForm.idAlert = '';
-        }
-        if(!passed){
-          return;
-        }else{
-          this.registerForm.nameAlert = '';
-          this.registerForm.classAlert = '';
-          this.registerForm.idAlert = '';
-          //向后端发送数据
-          let self = this;
-          axios.post(API_HOST+'Reg',{
-            name:this.registerForm.name,
-            class:this.registerForm.class,
-            id:this.registerForm.id
-          })
-          .then(function(res){
-            res = res.data;
-            console.log(res);
-            if(res.status == true){
-              localStorage.name = self.registerForm.name;
-              alert("注册成功");
-              router.push({ path: '/test' });
-            }
-          })
-          .catch(function(err){
-            console.log(err);
-            alert("注册失败，可能信息已被注册");
-          });
-        }
-      },
-      handleChange () {
-
+        this.$router.push({path:'/test',query:{Total:this.number,choice:this.num1,judge:this.num2,admiring:this.num3}});
       }
     },
     //页面加载读取题目数量
@@ -372,10 +175,7 @@
         if(res.status == true){
           self.number = parseInt(res.questionNum);
         }
-      });
-      this.num1 = Math.ceil(this.number*0.75);
-      this.num2 = Math.ceil(this.number*0.15);
-      this.num3 = this.number - this.num1 - this.num2;
+      })
     }
   }
 </script>

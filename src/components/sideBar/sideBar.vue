@@ -13,7 +13,7 @@
       text-color="#48576a"
       :router="true"
       active-text-color="#20a0ff">
-      <el-menu-item index="index">
+      <el-menu-item index="/admin/index">
         <i class="fa fa-tachometer fa-lg"></i>
         <span slot="title">系统首页</span>
       </el-menu-item>

@@ -1,57 +1,16 @@
 <template>
   <el-row class="test">
     <el-row class="container">
-      <h1>越韵古诗测试试卷
-        <a href="javascript:void(0);" @click="LoginVisible = true">学生登录/注册</a>
-      </h1>
-
-      <el-dialog
-      title="登录/注册"
-      :visible.sync="LoginVisible"
-      width="25%">
-      <el-tabs type="card">
-        <el-tab-pane label="学生登录">
-          <el-form ref="form" :model="loginForm" label-width="60px">
-            <el-form-item label="姓名">
-              <el-input v-model="loginForm.name" placeholder="请输入姓名"></el-input>
-              <el-alert v-model="loginForm.nameAlert" v-if="loginForm.nameAlert!==''" type="warning" :closable="false">{{loginForm.nameAlert}}</el-alert>
-            </el-form-item>
-            <el-form-item label="班级">
-              <el-input v-model="loginForm.class" placeholder="请输入班级"></el-input>
-              <el-alert v-model="loginForm.classAlert" v-if="loginForm.classAlert!==''" type="warning" :closable="false">{{loginForm.classAlert}}</el-alert>
-            </el-form-item>
-            <el-form-item label="学号">
-              <el-input v-model="loginForm.id" placeholder="请输入学号"></el-input>
-              <el-alert v-model="loginForm.idAlert" v-if="loginForm.idAlert!==''" type="warning" :closable="false">{{loginForm.idAlert}}</el-alert>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="StudentLogin('loginForm')">登录</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="学生注册">
-          <el-form ref="form" :model="registerForm" label-width="60px">
-            <el-form-item label="姓名">
-              <el-input v-model="registerForm.name" placeholder="请输入姓名"></el-input>
-              <el-alert v-model="registerForm.nameAlert" v-if="registerForm.nameAlert!==''" type="warning" :closable="false">{{registerForm.nameAlert}}</el-alert>
-            </el-form-item>
-            <el-form-item label="班级">
-              <el-input v-model="registerForm.class" placeholder="请输入班级 格式3-2 为3年2班"></el-input>
-              <el-alert v-model="registerForm.classAlert" v-if="registerForm.classAlert!==''" type="warning" :closable="false">{{registerForm.classAlert}}</el-alert>
-
-            </el-form-item>
-            <el-form-item label="学号">
-              <el-input v-model="registerForm.id" placeholder="请输入学号"></el-input>
-              <el-alert v-model="registerForm.ideAlert" v-if="registerForm.idAlert!==''" type="warning" :closable="false">{{registerForm.idAlert}}</el-alert>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="StudentRegister">注册</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-      </el-tabs>
-    </el-dialog>
-
+      <h1>越韵古诗测试试卷</h1>
+      <div class="test_info">
+        <a class="test_login" v-if="!isLogin" href="javascript:void(0);" @click="LoginVisible = true">学生登录/注册</a>
+        <template v-else>
+          <span class="test_student">学号：{{this.id}}</span>
+          <span class="test_student">姓名：{{this.name}}</span>
+          <span class="test_student">班级：{{this.class}}</span>
+        </template>
+      </div>
+    
       <el-row class="test__question">
         <section>
           <h3>一、选择题（共5题，每题5分。每题只有一个答案是正确的，请从四个备选答案中选出正确选项）</h3>
@@ -88,7 +47,6 @@
               <el-radio :label="4">{{admiring.option[3]}}</el-radio>
             </el-radio-group>
           </el-row>
-
         </section>
 
         <el-row  class="test__handle">
@@ -96,78 +54,137 @@
         </el-row>
       </el-row>
     </el-row>
-
     
-
+    <el-dialog
+      title="学生登录/注册"
+      :visible.sync="LoginVisible"
+      center
+      width="40%">
+      <el-tabs>
+        <el-tab-pane label="学生登录">
+          <el-form ref="form" :model="loginForm" label-width="60px">
+            <el-form-item label="姓名">
+              <el-input v-model="loginForm.name" placeholder="请输入姓名"></el-input>
+            </el-form-item>
+            <el-form-item label="班级">
+              <el-input v-model="loginForm.class" placeholder="请输入班级"></el-input>
+            </el-form-item>
+            <el-form-item label="学号">
+              <el-input v-model="loginForm.id" placeholder="请输入学号"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="login">登录</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="学生注册">
+          <el-form ref="form" :model="registerForm" label-width="60px">
+            <el-form-item label="姓名">
+              <el-input v-model="registerForm.name" placeholder="请输入姓名"></el-input>
+            </el-form-item>
+            <el-form-item label="班级">
+              <el-input v-model="registerForm.class" placeholder="请输入班级 格式3-2 为3年2班"></el-input>
+            </el-form-item>
+            <el-form-item label="学号">
+              <el-input v-model="registerForm.id" placeholder="请输入学号"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="register">注册</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
   </el-row>
 </template>
 
 <script>
-import router from '../../router/router'
 import axios from 'axios'
 export default {
   data () {
     return {
-      fontcolor0:{
-        color:'red'
-      },
+      isLogin: false,
+      name: '',
+      class: '',
+      id: '',
       loginForm:{
         name:'',
         class:'',
-        id:'',
-        nameAlert:'',
-        classAlert:'',
-        idAlert:'',
-        error:''
+        id:''
       },
       registerForm:{
         name:'',
         class:'',
-        id:'',
-        nameAlert:'',
-        classAlert:'',
-        idAlert:''
+        id:''
       },
       LoginVisible: false,
-      username:'',
-      id:'',
       choiceradio:[],
+      choiceNum: 0,
       judgeradio:[],
-      admiringradio:[]
+      judgeNum: 0,
+      admiringradio:[],
+      admiringNum: 0,
     }
   },
   created:function(){
-    for(var i=0;i<this.choices.length;i++){
-      this.choiceradio[i] = 'choiceradio' + i;
-    }
-    for(var i=0;i<this.judges.length;i++){
-      this.judgeradio[i] = 'judgeradio' + i;
-    }
-    for(var i=0;i<this.admirings.length;i++){
-      this.admiringradio[i] = 'admiringradio' + i;
-    }
-  },
-  computed:{
-    choices:function(){
-      if(sessionStorage.getItem('choice') == null){
-        return this.$route.params.choice;
-      }
-      return JSON.parse(sessionStorage.getItem('choice'));
-    },
-    judges:function(){
-      if(sessionStorage.getItem('judge') == null){
-        return this.$route.params.judge;
-      }
-      return JSON.parse(sessionStorage.getItem('judge'));
-    },
-    admirings:function(){
-      if(sessionStorage.getItem('admiring') == null){
-        return this.$route.params.admiring;
-      }
-      return JSON.parse(sessionStorage.getItem('admiring'));
-    }
+    // 获取各类题目数量
+    this.choiceNum = this.$route.query.choiceNum || 0
+    this.judgeNum = this.$route.query.judgeNum || 0
+    this.admiringNum = this.$route.query.admiringNum || 0
   },
   methods:{
+    login(){
+      //登录验证
+      if(!this.loginForm.name || !this.loginForm.class || !this.loginForm.id) {
+        this.$message.warning('请填写完整登录信息')
+        return false
+      }
+      this.$axios({
+        method: 'POST',
+        url: `${API_HOST}Login`,
+        data: {
+          name: this.loginForm.name,
+          class: this.loginForm.class,
+          id: this.id
+        }
+      }).then((res) => {
+        if(!res.data.status) {
+          this.$message.error(res.data.msg)
+        } else {
+          this.$message.success(res.data.msg)
+          this.isLogin = false
+          this.name = this.loginForm.name
+          this.class = this.loginForm.class
+          this.id = this.loginForm.id
+        }
+      }).catch((err) => {
+        this.$message.error(`登录失败 ${err}`)
+      })
+    },
+    register(){
+      //注册验证
+      if(!this.registerForm.name || !this.registerForm.class || !this.registerForm.id) {
+        this.$message.warning('请填写完整注册信息')
+        return false
+      }
+      this.$axios({
+        method: 'POST',
+        url: `${API_HOST}Reg`,
+        data: {
+          name: this.registerForm.name,
+          class: this.registerForm.class,
+          id: this.id
+        }
+      }).then((res) => {
+        if(!res.data.status) {
+          this.$message.error(res.data.msg)
+        } else {
+          this.$message.success(res.data.msg)
+        }
+      }).catch((err) => {
+        this.$message.error(`注册失败 ${err}`)
+      })
+    },
     submit:function(){
       var check = /^\d$/;
       for(var i=0;i<this.choiceradio.length;i++){
@@ -191,14 +208,12 @@ export default {
       var answers = this.choiceradio.concat(this.judgeradio.concat(this.admiringradio));
       var selectarr = new Array('0','A','B','C','D');
       var judgearr = new Array('F','T');
-      for(var i=0;i<answers.length;i++){
-        console.log(answers[i]);
-      }
       axios.post(API_HOST+'Poetry/Grade',{
             id:this.id,
             answer:answers
           })
           .then(function(res){
+            res = res.data;
             if(res.status = true){
               var i,j,k;
               var wronganswer,answerid;
@@ -237,27 +252,13 @@ export default {
             alert("提交失败，请检查信息");
           });
     },
-  },
-  mounted () {
-    console.log(sessionStorage);
-    if(sessionStorage.getItem('chocie') == null){
-      var choicestr = JSON.stringify(this.$route.params.choice);
-      var judgestr = JSON.stringify(this.$route.params.judge);
-      var admiringstr = JSON.stringify(this.$route.params.admiring);
-      sessionStorage.setItem("choice",choicestr);
-      sessionStorage.setItem("judge",judgestr);
-      sessionStorage.setItem("admiring",admiringstr);
-      console.log(sessionStorage);
-    }
-    this.username = 'a';
-    this.id = '1';
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .test {
-    position: fixed;
+    position: absolute;
     overflow: auto;
     width: 100%;
     height: 100%;
@@ -271,16 +272,22 @@ export default {
         margin: 10px 0;
         padding: 30px 0;
         text-align: center;
-        a {
-          position: absolute;
-          right: 10px;
-          bottom: 0;
+      }
+      .test_info {
+        margin-bottom: 10px;
+        text-align: right;
+        font-weight: bold;
           color: #657180;
           font-size: 15px;
+        .test_login {
+          color: #657180;
           text-decoration: none;
           &:hover {
             color: red;
           }
+        }
+        .test_student {
+          margin-left: 10px;
         }
       }
       .test__question {
