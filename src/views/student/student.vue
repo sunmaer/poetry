@@ -210,7 +210,7 @@ import axios from 'axios'
         }
       },
       addStudent(){
-        axios.post("http://localhost:7001/Student/Add",{
+        axios.post(API_HOST+"Student/Add",{
           name:this.form.name,
           id:this.form.id,
           class:this.form.class
@@ -241,7 +241,7 @@ import axios from 'axios'
       },
       handleDelete(index, row){
         console.log(row);
-        axios.post("http://localhost:7001/Student/Delete",{
+        axios.post(API_HOST+"Student/Delete",{
           id:row.id,
         })
         .then(function(res) {
@@ -256,7 +256,7 @@ import axios from 'axios'
         });
       },
       editsubmit(){
-        axios.post("http://localhost:7001/Student/Update",{
+        axios.post(API_HOST+"Student/Update",{
           name:this.editform.name,
           id:this.editform.id,
           class:this.editform.class
@@ -295,7 +295,7 @@ import axios from 'axios'
         studentArray.push.apply(studentArray,studentNode);
         this.tableData3 = studentArray;
         this.oldtableData = this.tableData3;
-        axios.get("http://localhost:7001/StudentList")
+        axios.get(API_HOST+"StudentList")
         .then(function(res) {
           console.log(res);
           if(res.status == true){

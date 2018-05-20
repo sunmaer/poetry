@@ -11,6 +11,7 @@ import axios from 'axios'
 Vue.prototype.$axios = axios
 Vue.use(ElementUI)
 Vue.config.productionTip = false
+window.API_HOST = process.env.API_HOST
 
 /* eslint-disable no-new */
 new Vue({

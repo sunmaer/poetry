@@ -68,7 +68,7 @@
           this.clearCookie();
         }
         //向后端发送数据
-          axios.post('http://localhost:7001/Admin/Login',{
+          axios.post(API_HOST+'Admin/Login',{
             name:this.formLabelAlign.name,
             password:this.formLabelAlign.region
           })

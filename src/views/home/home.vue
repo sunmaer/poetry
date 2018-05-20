@@ -203,7 +203,7 @@
           alert('题目数不符合要求');
           return;
         }
-        axios.post('http://localhost:7001/poetry/Library',{
+        axios.post(API_HOST+'Poetry/Library',{
           num:[this.num1,this.num2,this.num3]
         })
         .then(function(res){
@@ -281,7 +281,7 @@
           this.loginForm.classAlert = '';
           this.loginForm.idAlert = '';
           //向后端发送数据
-          axios.post('http://localhost:7001/Login',{
+          axios.post(API_HOST+'Login',{
             name:this.loginForm.name,
             class:this.loginForm.class,
             id:this.loginForm.id
@@ -335,14 +335,14 @@
           this.registerForm.classAlert = '';
           this.registerForm.idAlert = '';
           //向后端发送数据
-          axios.post('http://localhost:7001/Reg',{
+          axios.post(API_HOST+'Reg',{
             name:this.registerForm.name,
             class:this.registerForm.class,
             id:this.registerForm.id
           })
           .then(function(res){
             console.log(res);
-            if(res.status = true){
+            if(res.status == true){
               localStorage.name = this.registerForm.name;
               alert("注册成功");
               router.push({ path: '/test' });
@@ -357,7 +357,7 @@
     },
     //页面加载读取题目数量
     mounted () {
-      axios.get('http://localhost:7001/Global/QuestionNum')
+      axios.get(API_HOST+'Global/QuestionNum')
       .then(function(res){
         if(res.status == true){
           this.number = parseInt(res.questionNum);

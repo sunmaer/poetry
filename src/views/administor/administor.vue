@@ -129,7 +129,7 @@
         if(this.form.password == ''){
           return;
         }
-        axios.post('http://localhost:7001/Admin/Reg',{
+        axios.post(API_HOST+'Admin/Reg',{
             name:this.form.name,
             password:this.form.password
           })
@@ -173,7 +173,7 @@
         
         this.adminData = adminArray;
         this.oldadminData = this.adminData;
-        axios.get("http://localhost:7001/AdminList")
+        axios.get(API_HOST+"AdminList")
         .then(function(res) {
           console.log(res);
           if(res.status == true){

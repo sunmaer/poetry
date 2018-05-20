@@ -52,7 +52,7 @@
       this.questionNum = 40;
       this.studentNum = 412;
       this.poetryNum = 120;
-      axios.get('http://localhost:7001/global/index')
+      axios.get(API_HOST+'Global/Index')
       .then(function(res){
         if(res.status == true){
           this.questionNum = res.questionNum;

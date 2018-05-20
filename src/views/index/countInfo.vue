@@ -63,7 +63,7 @@ import axios from 'axios'
           this.input = !this.input;
           this.btnName = '修改';
           this.link = !this.link;
-          axios.post('http://localhost:7001/global/questionNum',{
+          axios.post(API_HOST+'Global/QuestionNum',{
             questionNum:this.number
           })
           .then(function(res){
