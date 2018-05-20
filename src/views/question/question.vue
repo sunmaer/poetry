@@ -364,7 +364,7 @@ import axios from 'axios'
       
       AddQuestion:function(){
         if(this.form.region == 'choice'){
-          axios.post('http://localhost:7001/poetry/add',{
+          axios.post(API_HOST+'Poetry/Add',{
             type:0,
             question:this.form.desc,
             option:this.form.order,
@@ -373,7 +373,7 @@ import axios from 'axios'
             image:this.form.image
           })
           .then(function(res){
-            console.log(res);
+            res = res.data;
             if(res.status = true){
               alert("添加成功");
             }
@@ -384,7 +384,7 @@ import axios from 'axios'
           });
         }
         if(this.form.region == 'admiring'){
-          axios.post('http://localhost:7001/poetry/add',{
+          axios.post(API_HOST+'Poetry/Add',{
             type:2,
             question:this.form.desc,
             option:this.form.order,
@@ -393,7 +393,7 @@ import axios from 'axios'
             video:this.form.image
           })
           .then(function(res){
-            console.log(res);
+          res = res.data;           
             if(res.status = true){
               alert("添加成功");
             }
@@ -409,13 +409,14 @@ import axios from 'axios'
           }else if(this.form.answer == 'F'){
             var answerm = 0;
           }
-          axios.post('http://localhost:7001/poetry/add',{
+          axios.post(API_HOST+'Poetry/Add',{
             type:1,
             question:this.form.desc,
             answer:answerm,
             analysis:this.form.analysis,
           })
           .then(function(res){
+          res = res.data;
             console.log(res);
             if(res.status = true){
               alert("添加成功");
@@ -451,8 +452,9 @@ import axios from 'axios'
         }
         this.tableData3 = questionArray;
         this.oldtableData = this.tableData3;
-        axios.get('http://localhost:7001/questionList')
+        axios.get(API_HOST+'QuestionList')
         .then(function(res){
+          res = res.data;
           console.log(res);
           if(res.status = true){
             for(var i=0;i<res.data.choice.length;i++){
@@ -525,9 +527,9 @@ import axios from 'axios'
             }
         };
         //然后通过下面的方式把内容通过axios来传到后台
-        axios.post("http://localhost:7001/Poetry/Update", this.param, config)
+        axios.post(API_HOST+"Poetry/Update", this.param, config)
         .then(function(res) {
-          console.log(res);
+          res = res.data;
           if(res.status == true){
             alert('修改成功');
           }
@@ -538,12 +540,12 @@ import axios from 'axios'
         });
       },
       handleDelete(index, row){
-        axios.post("http://localhost:7001/Poetry/Delete",{
+        axios.post(API_HOST+"Poetry/Delete",{
           type:row.type,
           id:row.id,
         })
         .then(function(res) {
-          console.log(res);
+          res = res.data;
           if(res.status == true){
             alert('删除成功');
           }

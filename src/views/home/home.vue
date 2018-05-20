@@ -140,9 +140,9 @@
         type: '越韵古诗',
         dialogVisible: false,
         number: 50,
-        num1: 0,
-        num2: 0,
-        num3: 0
+        num1: 1,
+        num2: 6,
+        num3: 1
       }
     },
     computed:{
@@ -157,6 +157,7 @@
     },
     methods: {
       confirm () {
+<<<<<<< HEAD
         if(this.num1+this.num2+this.num3 != this.number){
           this.$message({
             message:'题目数不符合要求',
@@ -165,6 +166,99 @@
           return false;
         }
         router.push({path:'/test',query:{Total:this.number,choice:this.num1,judge:this.num2,admiring:this.num3}});
+=======
+        router.push({ name: 'Test',params:{
+    choice: [
+      {
+        id: 1,
+        question: "1+1=?",
+        option: [
+          '2', '3', '4', '5'
+        ],
+        analysis: '简单的运算',
+        image: 'www.baidu.com', //可选
+      },
+      {
+        id: 2,
+        question: "1+1=?",
+        option: [
+          '2', '3', '4', '5'
+        ],
+        analysis: '简单的运算',
+        image: 'www.baidu.com', //可选
+      },
+    ], // 选择题
+    judge: [
+      {
+        id: 1,
+        question: "1+1=2",
+        analysis: '简单的运算',
+        image: 'www.baidu.com', //可选
+      },
+    ],// 判断题
+    admiring: [
+      {
+        id: 1,
+        question: "1+1=?",
+        option: [
+          '2', '3', '4', '5'
+        ],
+        analysis: '简单的运算',
+        video: 'www.baidu.com', //可选
+      },
+    ], // 欣赏题
+  }});
+        // if(this.num1+this.num2+this.num3 != this.number){
+        //   alert('题目数不符合要求');
+        //   return;
+        // }
+        axios.defaults.withCredentials = true;
+        axios.post(API_HOST+'Poetry/Library',{
+          num:[this.num1,this.num2,this.num3]
+        })
+        .then(function(res){
+          console.log(res);
+          if(res.status == true){
+            router.push({ name: 'Test ',params:{
+    choice: [
+      {
+        id: 1,
+        question: "1+1=?",
+        option: [
+          '2', '3', '4', '5'
+        ],
+        analysis: '简单的运算',
+        image: 'www.baidu.com', //可选
+      },
+    ], // 选择题
+    judge: [
+      {
+        id: 1,
+        question: "1+1=2",
+        analysis: '简单的运算',
+        image: 'www.baidu.com', //可选
+      },
+    ],// 判断题
+    admiring: [
+      {
+        id: 1,
+        question: "1+1=?",
+        option: [
+          '2', '3', '4', '5'
+        ],
+        analysis: '简单的运算',
+        video: 'www.baidu.com', //可选
+      },
+    ], // 欣赏题
+  }});
+          }
+        })
+        .catch(function(err){
+            console.log(err);
+            alert("提交失败，请检查信息");
+            
+        });
+>>>>>>> a5dbe395a6f393acb6bf46f8955f362da5ae1b8a
       },
       StudentLogin(formName){
         //登录字符验证
@@ -287,10 +381,12 @@
     },
     //页面加载读取题目数量
     mounted () {
+      var self = this;
       axios.get(API_HOST+'Global/QuestionNum')
       .then(function(res){
+        res = res.data;
         if(res.status == true){
-          this.number = parseInt(res.questionNum);
+          self.number = parseInt(res.questionNum);
         }
       });
       this.num1 = Math.ceil(this.number*0.75);
