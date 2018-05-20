@@ -168,6 +168,121 @@ export default {
     }
   },
   methods:{
+    StudentLogin(formName){
+      //登录字符验证
+      var passed = true;
+      var reg = /[0-9]-[0-9]/;
+      if(this.loginForm.name == ''){
+        this.loginForm.nameAlert = '用户名不能为空';
+        passed = false;
+      }else if(this.loginForm.name != ''){
+        this.loginForm.nameAlert = '';
+      }
+      if(this.loginForm.class == ''){
+        this.loginForm.classAlert = '班级不能为空';
+        passed = false;
+      }else if(!reg.test(this.loginForm.class)){
+        this.loginForm.classAlert = '班级格式错误';
+        passed = false;
+      }else if(this.loginForm.class != '' && reg.test(this.loginForm.class)){
+        this.loginForm.classAlert = '';
+      }
+      if(this.loginForm.id == ''){
+        this.loginForm.idAlert = '学号不能为空';
+        passed = false;
+      }else if(this.loginForm.id != ''){
+        this.loginForm.idAlert = '';
+      }
+      if(!passed){
+        return;
+      }else{
+        this.loginForm.nameAlert = '';
+        this.loginForm.classAlert = '';
+        this.loginForm.idAlert = '';
+        //向后端发送数据
+        let self = this;
+        axios.post(API_HOST+'Login',{
+          name:this.loginForm.name,
+          class:this.loginForm.class,
+          id:this.loginForm.id
+        })
+        .then(function(res){
+          res = res.data;
+          if(res.status == true){
+            localStorage.name = self.loginForm.name;
+            localStorage.class = self.loginForm.class;
+            localStorage.id = self.loginForm.id;
+            this.$message({
+              message:'登陆成功',
+              type:'success'
+            });
+          }
+          
+        })
+        .catch(function(err){
+          this.$message({
+            message:'登录失败',
+            type:'warning'
+          })
+        });
+
+      }
+    },
+    StudentRegister(){
+      var passed = true;
+      var reg = /[0-9]-[0-9]/;
+      if(this.registerForm.name == ''){
+        this.registerForm.nameAlert = '用户名不能为空';
+        passed = false;
+      }else if(this.registerForm.name != ''){
+        this.registerForm.nameAlert = '';
+      }
+      if(this.registerForm.class == ''){
+        this.registerForm.classAlert = '班级不能为空';
+        passed = false;
+      }else if(!reg.test(this.registerForm.class)){
+        this.registerForm.classAlert = '班级格式错误';
+        passed = false;
+      }else if(this.registerForm.class != '' && reg.test(this.registerForm.class)){
+        this.registerForm.classAlert = '';
+      }
+      if(this.registerForm.id == ''){
+        this.registerForm.idAlert = '学号不能为空';
+        passed = false;
+      }else if(this.registerForm.id != ''){
+        this.registerForm.idAlert = '';
+      }
+      if(!passed){
+        return;
+      }else{
+        this.registerForm.nameAlert = '';
+        this.registerForm.classAlert = '';
+        this.registerForm.idAlert = '';
+        //向后端发送数据
+        let self = this;
+        axios.post(API_HOST+'Reg',{
+          name:this.registerForm.name,
+          class:this.registerForm.class,
+          id:this.registerForm.id
+        })
+        .then(function(res){
+          res = res.data;
+          if(res.status == true){
+            localStorage.name = self.registerForm.name;
+            this.$message({
+              message:'注册成功',
+              type:'success'
+            });
+          }
+        })
+        .catch(function(err){
+          this.$message({
+            message:'注册失败，可能信息已被注册',
+            type:'warning'
+          })
+        });
+      }
+    },
     submit:function(){
       var check = /^\d$/;
       for(var i=0;i<this.choiceradio.length;i++){
@@ -191,14 +306,12 @@ export default {
       var answers = this.choiceradio.concat(this.judgeradio.concat(this.admiringradio));
       var selectarr = new Array('0','A','B','C','D');
       var judgearr = new Array('F','T');
-      for(var i=0;i<answers.length;i++){
-        console.log(answers[i]);
-      }
       axios.post(API_HOST+'Poetry/Grade',{
             id:this.id,
             answer:answers
           })
           .then(function(res){
+            res = res.data;
             if(res.status = true){
               var i,j,k;
               var wronganswer,answerid;
