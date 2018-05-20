@@ -27,14 +27,14 @@
         </el-menu-item>
         <!-- <el-menu-item index="2-2">增加题目</el-menu-item> -->
       </el-submenu>
-      <el-submenu index="studentManage">
+      <el-submenu index="/admin/studentManage">
         <template slot="title">
           <i class="fa fa-user-o fa-lg"></i>
           <span slot="title">学生管理</span>
         </template>
         <el-menu-item index="/admin/student">学生列表</el-menu-item>
       </el-submenu>
-      <el-submenu index="adminManage">
+      <el-submenu index="/admin/adminManage">
         <template slot="title">
           <i class="fa fa-id-card-o fa-lg"></i>
           <span slot="title">管理员</span>
