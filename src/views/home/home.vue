@@ -163,7 +163,7 @@
           });
           return false;
         }
-        this.$router.push({path:'/test',query:{Total:this.number,choice:this.num1,judge:this.num2,admiring:this.num3}});
+        this.$router.push({path:'/test',query:{total:this.number,choice:this.num1,judge:this.num2,admiring:this.num3}});
       }
     },
     //页面加载读取题目数量

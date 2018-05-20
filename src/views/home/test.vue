@@ -12,8 +12,9 @@
       </div>
     
       <el-row class="test__question">
+        <h2 v-if="showGrade" class="test__grade">分数：<span>90</span>（优秀）</h2>
         <section>
-          <h3>一、选择题（共5题，每题5分。每题只有一个答案是正确的，请从四个备选答案中选出正确选项）</h3>
+          <h3>一、选择题（共{{choiceNum}}题，每题{{100 / +total}}分。每题只有一个答案是正确的，请从四个备选答案中选出正确选项）</h3>
           <el-row v-for="(choice,index) in choice" :key="index" class="question__item">
             <h4 :id="'choiceOrder'+index">{{index+1}}.{{choice.question}}</h4>
             <el-radio-group v-model="choiceAnswer[index]" class="item" >
@@ -26,7 +27,7 @@
         </section>
 
         <section>
-          <h3>二、判断题（共5题，每题5分。请根据题目内容选择正确或者错误）</h3>
+          <h3>二、判断题（共{{judgeNum}}题，每题{{100 / +total}}分。请根据题目内容选择正确或者错误）</h3>
           <el-row v-for="(judge,index) in judges" :key="index" class="question__item">
             <h4 :id="'judgeOrder'+index">{{index+1}}. {{judge.question}}</h4>
             <el-radio-group v-model="judgeAnswer[index]" class="item">
@@ -37,7 +38,7 @@
         </section>
 
         <section>
-          <h3>三、欣赏题（共5题，每题5分。请欣赏完作品后完成选项，每题只有一个答案是正确的，请从四个备选答案中选出正确选项）</h3>
+          <h3>三、欣赏题（共{{admiringNum}}题，每题{{100 / +total}}分。请欣赏完作品后完成选项，每题只有一个答案是正确的，请从四个备选答案中选出正确选项）</h3>
           <el-row v-for="(admiring,index) in admirings" :key="index" class="question__item">
             <h4 :id="'admiringOrder'+index">{{index+1}}.{{admiring.question}}</h4>
             <el-radio-group v-model="admiringAnswer[index]" class="item">
@@ -104,6 +105,9 @@ export default {
   data () {
     return {
       isLogin: false,
+      LoginVisible: true,
+      grade: 0,
+      showGrade: false,
       name: '',
       class: '',
       id: '',
@@ -117,7 +121,7 @@ export default {
         class:'',
         id:''
       },
-      LoginVisible: true,
+      total: 1,
       choice:[],
       choiceNum: 0,
       choiceAnswer: [],
@@ -131,9 +135,10 @@ export default {
   },
   created:function(){
     // 获取各类题目数量
-    this.choiceNum = this.$route.query.choiceNum || 0
-    this.judgeNum = this.$route.query.judgeNum || 0
-    this.admiringNum = this.$route.query.admiringNum || 0
+    this.total = this.$route.query.total || 1
+    this.choiceNum = this.$route.query.choice || 0
+    this.judgeNum = this.$route.query.judge || 0
+    this.admiringNum = this.$route.query.admiring || 0
 
     // 获取题库
     this.$axios({
@@ -209,7 +214,28 @@ export default {
         this.$message.warning('登录以后才可以提交试卷')
         return false
       }
-
+      this.$axios({
+        method: 'POST',
+        url: `${API_HOST}Poetry/Grade`,
+        data: {
+          id: this.id,
+          answer: [this.choiceAnswer, this.judgeAnswer, this.admiringAnswer]
+        }
+      }).then((res) => {
+        if(res.data && res.data.status) {
+          this.grade = res.data.data.grade || 0
+          let tips = ''
+          if(this.grade > 80) {
+            tips = '请再接再厉！'
+          }
+          this.showGrade = true
+          this.$message.success(`试卷批改成功，你的分数为${this.grade}，${tips}！`)
+          // 正确答案
+          // TODOS: 改正
+        }
+      }).catch((err) => {
+        console.log(`提交试卷失败 ${err}`)
+      })
     },
   }
 }
@@ -257,6 +283,14 @@ export default {
         padding: 30px;
         box-sizing: border-box;
         background-color: white;
+        .test__grade {
+          font-size: 30px;
+          text-align: right;
+          span {
+            color: red;
+            font-size: 45px;
+          }
+        }
         .question__item {
           padding: 0 20px;
           h4 {
