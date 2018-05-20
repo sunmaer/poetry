@@ -17,30 +17,30 @@
         <i class="fa fa-tachometer fa-lg"></i>
         <span slot="title">系统首页</span>
       </el-menu-item>
-      <el-submenu index="questionManage">
+      <el-submenu index="/admin/questionManage">
         <template slot="title">
           <i class="fa fa-folder-o fa-lg"></i>
           <span slot="title">题库管理</span>
         </template>
-        <el-menu-item index="question">
+        <el-menu-item index="/admin/question">
           <span slot="title">题目列表</span>
         </el-menu-item>
         <!-- <el-menu-item index="2-2">增加题目</el-menu-item> -->
       </el-submenu>
-      <el-submenu index="studentManage">
+      <el-submenu index="/admin/studentManage">
         <template slot="title">
           <i class="fa fa-user-o fa-lg"></i>
           <span slot="title">学生管理</span>
         </template>
-        <el-menu-item index="student">学生列表</el-menu-item>
+        <el-menu-item index="/admin/student">学生列表</el-menu-item>
       </el-submenu>
-      <el-submenu index="adminManage">
+      <el-submenu index="/admin/adminManage">
         <template slot="title">
           <i class="fa fa-id-card-o fa-lg"></i>
           <span slot="title">管理员</span>
         </template>
-        <el-menu-item index="administor">管理员列表</el-menu-item>
-        <el-menu-item index="self">个人中心</el-menu-item>
+        <el-menu-item index="/admin/administor">管理员列表</el-menu-item>
+        <el-menu-item index="/admin/self">个人中心</el-menu-item>
       </el-submenu>
     </el-menu>
   </el-aside>

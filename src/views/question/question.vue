@@ -155,10 +155,14 @@
         <el-form-item label="题目附件">
           <el-upload
             class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            :data="formatData()"
+            ref="upload"
+            :name="this.form.region == 'admiring' ? 'video':'image' "
+            :action="API_HOST+'Poetry/Add'"
             show-file-list
             :limit="1"
-            :before-upload="beforeUpload">
+            :before-upload="beforeUpload"
+            :auto-upload="false">
             <el-button size="small" type="primary">点击上传</el-button>
 <!--            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
           </el-upload>
@@ -232,6 +236,7 @@ import axios from 'axios'
   export default {
     data () {
       return {
+        API_HOST: window.API_HOST,
         addDialogVisible: false,
         editQuestion:false,
         currentPage:1,
@@ -452,6 +457,7 @@ import axios from 'axios'
         }
         this.tableData3 = questionArray;
         this.oldtableData = this.tableData3;
+        let self = this;
         axios.get(API_HOST+'QuestionList')
         .then(function(res){
           res = res.data;
@@ -472,7 +478,7 @@ import axios from 'axios'
               newNode.type = '2';
               questionArray.push.apply(questionArray,newNode);
             }
-            this.tableData3 = questionArray;
+            self.tableData3 = questionArray;
           }
         })
       },
@@ -570,8 +576,8 @@ import axios from 'axios'
       httprequest() {
 
       },
-      onSubmit(){//表单提交的事件
-          //下面append的东西就会到form表单数据的fields中；
+      formatData(){//表单提交的事件
+
           var type = this.form.region == 'choice'?'0':this.form.region == 'judge'?'1':'2';
           var question = this.form.desc;
           var option = this.form.order;
@@ -583,28 +589,17 @@ import axios from 'axios'
             var answer = this.form.answer;
           }
           var analysis = this.form.analysis;
-          this.param.set('type', type);
-          this.param.set('question', question);
-          this.param.set('option', option);
-          this.param.set('answer', answer);
-          this.param.set('analysis', analysis);
-          let config = {
-              headers: {
-                  'Content-Type': 'multipart/form-data'
-              }
-          };
-          //然后通过下面的方式把内容通过axios来传到后台
-          axios.post("http://localhost:7001/Poetry/Add", this.param, config)
-          .then(function(res) {
-            console.log(res);
-            if(res.status == true){
-              alert('添加成功');
-            }
-          })
-          .catch(function(err){
-            console.log(err);
-            alert("添加失败，请检查信息");
-          });
+          
+          return {
+            type,
+            question,
+            option,
+            answer,
+            analysis
+          }
+      },
+      onSubmit() {
+        this.$refs.upload.submit();
       }
 
     },
