@@ -288,7 +288,7 @@
           })
           .then(function(res){
             console.log(res);
-            if(res.status = true){
+            if(res.status == true){
               localStorage.name = this.loginForm.name;
               localStorage.class = this.loginForm.class;
               localStorage.id = this.loginForm.id;
