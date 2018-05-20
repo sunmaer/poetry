@@ -4,8 +4,7 @@
       <el-col span="12" class="home__link"><a href="http://www.szchengnan.com/" target="_blank">嵊州市城南小学欢迎你</a></el-col>
       <el-col span="12" class="home__test">
         <router-link :to="{ path: '/login' }">管理员登录</router-link>&nbsp;&nbsp;
-        <a href="javascript:void(0);" @click="LoginVisible = true">学生登录</a>&nbsp;&nbsp;
-        <a href="javascript:void(0);" @click="dialogVisible = true" v-if="isLogin">{{ type }}在线测试 <i class="fa fa-arrow-circle-o-right"></i></a>
+        <a href="javascript:void(0);" @click="dialogVisible = true">{{ type }}在线测试 <i class="fa fa-arrow-circle-o-right"></i></a>
       </el-col>
       <el-col span="24">
         <img class="home__logo" src="../../assets/logo.jpg" alt="校园全景">
@@ -158,96 +157,14 @@
     },
     methods: {
       confirm () {
-        router.push({ name: 'Test',params:{
-    choice: [
-      {
-        id: 1,
-        question: "1+1=?",
-        option: [
-          '2', '3', '4', '5'
-        ],
-        analysis: '简单的运算',
-        image: 'www.baidu.com', //可选
-      },
-      {
-        id: 2,
-        question: "1+1=?",
-        option: [
-          '2', '3', '4', '5'
-        ],
-        analysis: '简单的运算',
-        image: 'www.baidu.com', //可选
-      },
-    ], // 选择题
-    judge: [
-      {
-        id: 1,
-        question: "1+1=2",
-        analysis: '简单的运算',
-        image: 'www.baidu.com', //可选
-      },
-    ],// 判断题
-    admiring: [
-      {
-        id: 1,
-        question: "1+1=?",
-        option: [
-          '2', '3', '4', '5'
-        ],
-        analysis: '简单的运算',
-        video: 'www.baidu.com', //可选
-      },
-    ], // 欣赏题
-  }});
         if(this.num1+this.num2+this.num3 != this.number){
-          alert('题目数不符合要求');
-          return;
+          this.$message({
+            message:'题目数不符合要求',
+            type:'warning'
+          });
+          return false;
         }
-        axios.post(API_HOST+'Poetry/Library',{
-          num:[this.num1,this.num2,this.num3]
-        })
-        .then(function(res){
-          console.log(res);
-          if(res.status == true){
-            router.push({ name: 'Test ',params:{
-    choice: [
-      {
-        id: 1,
-        question: "1+1=?",
-        option: [
-          '2', '3', '4', '5'
-        ],
-        analysis: '简单的运算',
-        image: 'www.baidu.com', //可选
-      },
-    ], // 选择题
-    judge: [
-      {
-        id: 1,
-        question: "1+1=2",
-        analysis: '简单的运算',
-        image: 'www.baidu.com', //可选
-      },
-    ],// 判断题
-    admiring: [
-      {
-        id: 1,
-        question: "1+1=?",
-        option: [
-          '2', '3', '4', '5'
-        ],
-        analysis: '简单的运算',
-        video: 'www.baidu.com', //可选
-      },
-    ], // 欣赏题
-  }});
-          }
-        })
-        .catch(function(err){
-            console.log(err);
-            alert("提交失败，请检查信息");
-            
-        });
+        router.push({path:'/test',query:{Total:this.number,choice:this.num1,judge:this.num2,admiring:this.num3}});
       },
       StudentLogin(formName){
         //登录字符验证
@@ -289,19 +206,22 @@
           })
           .then(function(res){
             res = res.data;
-            console.log(res)
             if(res.status == true){
               localStorage.name = self.loginForm.name;
               localStorage.class = self.loginForm.class;
               localStorage.id = self.loginForm.id;
-              alert("登录成功");
-              router.push({ path: '/' });
+              this.$message({
+                message:'登陆成功',
+                type:'success'
+              });
             }
             
           })
           .catch(function(err){
-            console.log(err);
-            alert("登录失败，请检查登录信息");
+            this.$message({
+              message:'登录失败',
+              type:'warning'
+            })
           });
 
         }
@@ -345,16 +265,19 @@
           })
           .then(function(res){
             res = res.data;
-            console.log(res);
             if(res.status == true){
               localStorage.name = self.registerForm.name;
-              alert("注册成功");
-              router.push({ path: '/test' });
+              this.$message({
+                message:'注册成功',
+                type:'success'
+              });
             }
           })
           .catch(function(err){
-            console.log(err);
-            alert("注册失败，可能信息已被注册");
+            this.$message({
+              message:'注册失败，可能信息已被注册',
+              type:'warning'
+            })
           });
         }
       },
