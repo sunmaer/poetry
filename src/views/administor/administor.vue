@@ -79,39 +79,18 @@
           name:'',
           password:''
         },
-        adminData: [{
-          id:'1',
-          name: '单栖情绪',
-        },{
-          id:'1',
-          name: '单栖情绪',
-        },{
-          id:'1',
-          name: '单栖情绪',
-        },{
-          id:'1',
-          name: '单栖情绪',
-        },{
-          id:'1',
-          name: '单栖情绪',
-        },{
-          id:'1',
-          name: '单栖情绪',
-        },{
-          id:'1',
-          name: '单栖情绪',
-        },{
-          id:'1',
-          name: '单栖情绪',
-        },{
-          id:'1',
-          name: '单栖情绪',
-        },{
-          id:'1',
-          name: '单栖情绪',
-        },],
+        adminData: [],
         oldadminData:[]
       }
+    },
+    created(){
+      let self = this;
+      axios.get(API_HOST+"AdminList")
+      .then((res) => {
+        if(res.data.status == true){
+          this.adminData = res.data.data;
+        }
+      });
     },
     methods: {
       search:function(){
@@ -129,20 +108,19 @@
         if(this.form.password == ''){
           return;
         }
-        axios.post(API_HOST+'Admin/Reg',{
+        axios.post(API_HOST+'Admin/Add',{
             name:this.form.name,
             password:this.form.password
           })
-          .then(function(res){
-            console.log(res);
-            if(res.status = true){
-              alert("添加成功");
+          .then((res) => {
+            if(!res.data.status) {
+              this.$message.error(res.data.msg)
+            } else {
+              this.$message.success(res.data.msg)
             }
+          }).catch((err) => {
+            this.$message.error(`添加失败 ${err}`)
           })
-          .catch(function(err){
-            console.log(err);
-            alert("添加失败，可能信息已被注册");
-          });
       },
       handleEdit(index, row){
         console.log(row);
@@ -159,31 +137,6 @@
 
     },
     mounted(){
-      var adminArray = new Array({
-          name: '情绪',
-          id: '1',
-        });
-        var adminNode = new Array({
-          name: '情绪',
-          id: '2',
-        });
-        for(var i=0;i<100;i++){
-          adminArray.push.apply(adminArray,adminNode);
-        }
-        
-        this.adminData = adminArray;
-        this.oldadminData = this.adminData;
-        axios.get(API_HOST+"AdminList")
-        .then(function(res) {
-          console.log(res);
-          if(res.status == true){
-            for(var i=0;i<res.data.length;i++){
-              adminNode = res.data[i];
-              adminArray.push.apply(adminArray,adminNode);
-            }
-            this.adminData = adminArray;
-          }
-        });
     }
   }
 </script>

@@ -124,7 +124,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addDialogVisible = false">取 消</el-button>
+        <el-button size="small" @click="editStudent = false">取 消</el-button>
         <el-button size="small" type="primary" @click="editsubmit">确 定</el-button>
       </span>
     </el-dialog>
@@ -137,6 +137,7 @@ import axios from 'axios'
     data () {
       return {
         addDialogVisible: false,
+        editStudent:false,
         currentPage:1,
         pagesize:10,
         formInline: {
@@ -152,57 +153,23 @@ import axios from 'axios'
           name:'',
           class:''
         },
-        tableData3: [{
-          id: '2014317200405',
-          name: '孙梦海',
-          class: '计科1404',
-          grade: [ 
-            [89, "2017-12-1", 1],  // 第一次测验
-            [92, "2018-2-12", 2]   // 第二次测验
-          ]
-        }, {
-          id: '2014317200405',
-          name: '孙梦海',
-          class: '计科1404'
-        }, {
-          id: '2014317200405',
-          name: '孙梦海',
-          class: '计科1404'
-        }, {
-          id: '2014317200405',
-          name: '孙梦海',
-          class: '计科1404'
-        }, {
-          id: '2014317200405',
-          name: '孙梦海',
-          class: '计科1404'
-        }, {
-          id: '2014317200405',
-          name: '孙梦海',
-          class: '计科1404'
-        }, {
-          id: '2014317200405',
-          name: '孙梦海',
-          class: '计科1404'
-        }, {
-          id: '2014317200405',
-          name: '孙梦海',
-          class: '计科1404'
-        }, {
-          id: '2014317200405',
-          name: '孙梦海',
-          class: '计科1404'
-        }, {
-          id: '2014317200405',
-          name: '孙梦海',
-          class: '计科1404'
-        }],
+        tableData3: [],
         oldtableData:[]
       }
     },
+    created(){
+        let self = this;
+        axios.get(API_HOST+'StudentList')
+        .then((res) => {
+          res = res.data;
+          if(res.status == true){
+            self.tableData3 = res.data;
+            self.oldtableData = self.tableData3;
+          }
+        });
+    },
     methods: {
       search:function(){
-        console.log(this.formInline.name);
         if(this.formInline.name == ''){
           this.tableData3 = this.oldtableData;
         }else{
@@ -210,24 +177,29 @@ import axios from 'axios'
         }
       },
       addStudent(){
-        axios.post(API_HOST+"Student/Add",{
-          name:this.form.name,
-          id:this.form.id,
-          class:this.form.class
-        })
-        .then(function(res) {
-          console.log(res);
-          if(res.status == true){
-            alert('添加成功');
+        if(!this.form.name || !this.form.class || !this.form.id) {
+          this.$message.warning('请填写完整添加信息')
+          return false
+        }
+        this.$axios({
+          method: 'POST',
+          url: `${API_HOST}Student/Add`,
+          data: {
+            name: this.form.name,
+            class: this.form.class,
+            id: this.form.id
           }
+        }).then((res) => {
+          if(!res.data.status) {
+            this.$message.error(res.data.msg)
+          } else {
+            this.$message.success(res.data.msg)
+          }
+        }).catch((err) => {
+          this.$message.error(`添加失败 ${err}`)
         })
-        .catch(function(err){
-          console.log(err);
-          alert("添加失败");
-        });
       },
       handleEdit(index, row){
-        console.log(row);
         this.editStudent = true;
         this.editform.id = row.id;
         this.editform.name = row.name;
@@ -240,19 +212,18 @@ import axios from 'axios'
           this.currentPage = currentPage;
       },
       handleDelete(index, row){
-        console.log(row);
         axios.post(API_HOST+"Student/Delete",{
           id:row.id,
         })
-        .then(function(res) {
-          console.log(res);
-          if(res.status == true){
-            alert('删除成功');
+        .then((res) => {
+          if(!res.data.status){
+            this.$message.error(res.data.msg);
+          } else {
+            this.$message.success(res.data.msg);
           }
         })
-        .catch(function(err){
-          console.log(err);
-          alert("删除失败");
+        .catch((err) => {
+          this.$message.error(`删除失败 ${err}`);
         });
       },
       editsubmit(){
@@ -261,51 +232,17 @@ import axios from 'axios'
           id:this.editform.id,
           class:this.editform.class
         })
-        .then(function(res) {
-          console.log(res);
-          if(res.status == true){
-            alert("修改成功");
+        .then((res) => {
+          if(!res.data.status){
+            this.$message.error(res.data.msg);
+          } else {
+            this.$message.success(res.data.msg);
           }
         })
-        .catch(function(err){
-          console.log(err);
-          alert("修改失败");
+        .catch((err) => {
+          this.$message.error(`删除失败 ${err}`);
         });
       }
-    },
-    mounted(){
-        var studentArray = new Array({
-          name: '张三',
-          id: '123456789',
-          class: '2-3',
-          grade: [ 
-            [89, "2017-12-1", 1],  // 第一次测验
-            [92, "2018-2-12", 2]   // 第二次测验
-          ]
-        });
-        var studentNode = new Array({
-          name: '张三',
-          id: '123456789',
-          class: '2-3',
-          grade: [ 
-            [89, "2017-12-1", 1],  // 第一次测验
-            [92, "2018-2-12", 2]   // 第二次测验
-          ]
-        });
-        studentArray.push.apply(studentArray,studentNode);
-        this.tableData3 = studentArray;
-        this.oldtableData = this.tableData3;
-        axios.get(API_HOST+"StudentList")
-        .then(function(res) {
-          console.log(res);
-          if(res.status == true){
-            for(var i=0;i<res.data.length;i++){
-              studentNode = res.data[i];
-              studentArray.push.apply(studentArray,studentNode);
-            }
-            this.tableData3 = studentArray;
-          }
-        });
     }
   }
 </script>

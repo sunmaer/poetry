@@ -53,12 +53,17 @@
       this.studentNum = 412;
       this.poetryNum = 120;
       axios.get(API_HOST+'Global/Index')
-      .then(function(res){
-        if(res.status == true){
-          this.questionNum = res.questionNum;
-          this.studentNum = res.studentNum;
-          this.poetryNum = res.poetryNum;
+      .then((res) => {
+        if(!res.data.status) {
+          this.$message.error(res.data.msg)
+        } else {
+          this.$message.success(res.data.msg)
+          this.questionNum = parseInt(res.data.questionNum[0])+parseInt(res.data.questionNum[1])+parseInt(res.data.questionNum[2])
+          this.studentNum = res.data.studentNum
+          this.poetryNum = res.data.poetryNum
         }
+      }).catch((err) => {
+          this.$message.error(`获取信息失败 ${err}`)
       })
     }
   }
