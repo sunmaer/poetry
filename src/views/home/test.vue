@@ -12,46 +12,58 @@
       </div>
     
       <el-row class="test__question">
-        <h2 v-if="showGrade" class="test__grade">分数：<span>90</span>（优秀）</h2>
+        <h2 v-if="showGrade" class="test__grade">分数：<span>{{ grade }}</span>（{{ level }}）</h2>
         <section>
           <h3>一、选择题（共{{choiceNum}}题，每题{{100 / +total}}分。每题只有一个答案是正确的，请从四个备选答案中选出正确选项）</h3>
           <el-row v-for="(choice,index) in choice" :key="index" class="question__item">
-            <h4 :id="'choiceOrder'+index">{{index+1}}.{{choice.question}}</h4>
-            <el-radio-group v-model="choiceAnswer[index]" class="item" >
-              <el-radio label="1">{{choice.option && choice.option[0]}}</el-radio>
-              <el-radio label="2">{{choice.option && choice.option[1]}}</el-radio>
-              <el-radio label="3">{{choice.option && choice.option[2]}}</el-radio>
-              <el-radio label="4">{{choice.option && choice.option[3]}}</el-radio>
+            <h4>{{index+1}}. {{choice.question}}</h4>
+            <div v-if="choice.image" class="test__image">
+              <img :src="choice.image" alt="古诗配图">
+            </div>
+            <el-radio-group :disabled="disable" v-model="choiceAnswer[index]" class="item" >
+              <el-radio :label="1">{{choice.option && choice.option[0]}}</el-radio>
+              <el-radio :label="2">{{choice.option && choice.option[1]}}</el-radio>
+              <el-radio :label="3">{{choice.option && choice.option[2]}}</el-radio>
+              <el-radio :label="4">{{choice.option && choice.option[3]}}</el-radio>
             </el-radio-group>
+            <h4 v-if="showAnswer && choiceAnswerAna[index]" :style="{color: choiceAnswerAna[index].color}">{{ getRightAnswer('choice', index) }}</h4>
           </el-row>
         </section>
 
         <section>
           <h3>二、判断题（共{{judgeNum}}题，每题{{100 / +total}}分。请根据题目内容选择正确或者错误）</h3>
-          <el-row v-for="(judge,index) in judges" :key="index" class="question__item">
-            <h4 :id="'judgeOrder'+index">{{index+1}}. {{judge.question}}</h4>
-            <el-radio-group v-model="judgeAnswer[index]" class="item">
-              <el-radio label="1">正确</el-radio>
-              <el-radio label="0">错误</el-radio>
+          <el-row v-for="(judge,index) in judge" :key="index" class="question__item">
+            <h4>{{index+1}}. {{judge.question}}</h4>
+            <div v-if="judge.image" class="test__image">
+              <img :src="judge.image" alt="古诗配图">
+            </div>
+            <el-radio-group :disabled="disable" v-model="judgeAnswer[index]" class="item">
+              <el-radio :label="1">正确</el-radio>
+              <el-radio :label="0">错误</el-radio>
             </el-radio-group>
+            <h4 v-if="showAnswer && judgeAnswerAna[index]" :style="{color: judgeAnswerAna[index].color}">{{ getRightAnswer('judge', index) }}</h4>
           </el-row>
         </section>
 
         <section>
           <h3>三、欣赏题（共{{admiringNum}}题，每题{{100 / +total}}分。请欣赏完作品后完成选项，每题只有一个答案是正确的，请从四个备选答案中选出正确选项）</h3>
-          <el-row v-for="(admiring,index) in admirings" :key="index" class="question__item">
-            <h4 :id="'admiringOrder'+index">{{index+1}}.{{admiring.question}}</h4>
-            <el-radio-group v-model="admiringAnswer[index]" class="item">
+          <el-row v-for="(admiring,index) in admiring" :key="index" class="question__item">
+            <h4>{{index+1}}. {{admiring.question}}</h4>
+            <div v-if="admiring.image" class="test__image">
+              <img :src="admiring.image" alt="古诗配图">
+            </div>
+            <el-radio-group :disabled="disable" v-model="admiringAnswer[index]" class="item">
               <el-radio :label="1">{{admiring.option && admiring.option[0]}}</el-radio>
               <el-radio :label="2">{{admiring.option && admiring.option[1]}}</el-radio>
               <el-radio :label="3">{{admiring.option && admiring.option[2]}}</el-radio>
               <el-radio :label="4">{{admiring.option && admiring.option[3]}}</el-radio>
             </el-radio-group>
+            <h4 v-if="showAnswer && admiringAnswerAna[index]" :style="{color: admiringAnswerAna[index].color}">{{ getRightAnswer('admiring', index) }}</h4>            
           </el-row>
         </section>
 
         <el-row  class="test__handle">
-          <el-button type="primary" @click="submit">提交试卷</el-button>
+          <el-button :disabled="disable" type="primary" @click="submit">提交试卷</el-button>
         </el-row>
       </el-row>
     </el-row>
@@ -84,7 +96,7 @@
               <el-input v-model="registerForm.name" placeholder="请输入姓名"></el-input>
             </el-form-item>
             <el-form-item label="班级">
-              <el-input v-model="registerForm.class" placeholder="请输入班级 格式3-2 为3年2班"></el-input>
+              <el-input v-model="registerForm.class" placeholder="请输入班级，例如101"></el-input>
             </el-form-item>
             <el-form-item label="学号">
               <el-input v-model="registerForm.id" placeholder="请输入学号"></el-input>
@@ -107,7 +119,12 @@ export default {
       isLogin: false,
       LoginVisible: true,
       grade: 0,
+      level: '',
       showGrade: false,
+      // 试卷批改成功
+      disable: false,
+      // 试卷答案
+      showAnswer: false,
       name: '',
       class: '',
       id: '',
@@ -122,15 +139,22 @@ export default {
         id:''
       },
       total: 1,
+      // 选择题题库
       choice:[],
+      // 选择题数量
       choiceNum: 0,
+      // 选择题提交试卷答案
       choiceAnswer: [],
+      // 选择题答案解析
+      choiceAnswerAna: [],
       judge:[],
       judgeNum: 0,
       judgeAnswer: [],
+      judgeAnswerAna: [],
       admiring:[],
       admiringNum: 0,
-      admiringAnswer: []
+      admiringAnswer: [],
+      admiringAnswerAna: []
     }
   },
   created:function(){
@@ -145,16 +169,36 @@ export default {
     this.$axios({
       method: 'POST',
       url: `${API_HOST}Poetry/Library`,
-      data: [this.choiceNum, this.judgeNum, this.admiringNum]
+      data: {
+        num: [this.choiceNum, this.judgeNum, this.admiringNum]
+      }
     }).then((res) => {
-      if(res.status) {
-        this.choice = res.data.choice
-        this.judge = res.data.judge
-        this.admiring = res.data.admiring
+      if(res.data.status) {
+        this.choice = res.data.data.choice
+        this.judge = res.data.data.judge
+        this.admiring = res.data.data.admiring
       }
     }).catch((err) => {
       this.$message.error(`题库获取失败 ${err}`)
     })
+  },
+  computed: {
+    getRightAnswer (type, index) {
+      if(type === 'choice') {
+        console.log(this.choiceAnswerAna[index])
+        return this.choiceAnswerAna[index].isCorrect ?
+          '答案正确' : 
+          '答案错误，正确答案为：' + this.choice[index].option[this.choiceAnswerAna[index].answer]
+      } else if(type === 'judge') {
+        return this.judgeAnswerAna[index].isCorrect ?
+          '答案正确' : 
+          '答案错误，正确答案为：' + this.judge[index].option[this.choiceAnswerAna[index].answer] === 1 ? '正确' : '错误'
+      } else {
+        return this.admiringAnswerAna[index].isCorrect ?
+          '答案正确' : 
+          '答案错误，正确答案为：' + this.admiring[index].option[this.admiringAnswerAna[index].answer]
+      }
+    }
   },
   methods:{
     login(){
@@ -169,14 +213,15 @@ export default {
         data: {
           name: this.loginForm.name,
           class: this.loginForm.class,
-          id: this.id
+          id: this.loginForm.id
         }
       }).then((res) => {
         if(!res.data.status) {
           this.$message.error(res.data.msg)
         } else {
           this.$message.success(res.data.msg)
-          this.isLogin = false
+          this.LoginVisible = false
+          this.isLogin = true
           this.name = this.loginForm.name
           this.class = this.loginForm.class
           this.id = this.loginForm.id
@@ -211,28 +256,95 @@ export default {
     },
     submit:function(){
       // 登录才可以提交试卷
-      if(!this.isLogin) {
-        this.$message.warning('登录以后才可以提交试卷')
-        return false
+      // if(!this.isLogin) {
+      //   this.$message.warning('登录以后才可以提交试卷')
+      //   return false
+      // }
+      // 试卷完成才能提交
+      if(this.choiceAnswer.length !== +this.choiceNum || 
+        this.judgeAnswer.length !== +this.judgeNum || 
+        this.admiringAnswer.length !== +this.admiringNum) {
+          this.$message.warning('试卷全部完成才可以提交试卷')
+          return false
       }
       this.$axios({
         method: 'POST',
         url: `${API_HOST}Poetry/Grade`,
         data: {
-          id: this.id,
+          id: 250,
           answer: [this.choiceAnswer, this.judgeAnswer, this.admiringAnswer]
         }
       }).then((res) => {
         if(res.data && res.data.status) {
-          this.grade = res.data.data.grade || 0
+          this.grade = parseInt(res.data.data.grade)
           let tips = ''
-          if(this.grade > 80) {
-            tips = '请再接再厉！'
+          if(this.grade > 85) {
+            tips = '非常棒！'
+            this.level = '优秀'
+          } else if(this.grade <= 85 && this.grade > 70) {
+            tips = '考的不错呀！'
+            this.level = '良好'
+          } else if(this.grade <= 70 && this.grade > 60) {
+            tips = '你已经通过考查！'
+            this.level = '及格'
+          } else {
+            tips = '请继续努力！'
+            this.level = '不及格'
           }
           this.showGrade = true
-          this.$message.success(`试卷批改成功，你的分数为${this.grade}，${tips}！`)
-          // 正确答案
-          // TODOS: 改正
+          this.disable = true
+          this.$message.success(`试卷批改成功，${this.name}，你的分数为${this.grade}，${tips}`)
+          // 显示正确答案
+          this.showAnswer = true
+          let rightAnswer = res.data.data.right_answer
+          // 选择题答案解析
+          rightAnswer[0].forEach((item, index) => {
+            if(item === this.choiceAnswer[index]) {
+              this.choiceAnswerAna.push({
+                isCorrect: true,
+                answer: item,
+                color: '#67C23A'
+              })
+            } else {
+              this.choiceAnswerAna.push({
+                isCorrect: false,
+                answer: item,
+                color: '#F56C6C'
+              })
+            }
+          })
+          // 判断题答案解析
+          rightAnswer[1].forEach((item, index) => {
+            if(item === this.judgeAnswer[index]) {
+              this.judgeAnswerAna.push({
+                isCorrect: true,
+                answer: item,
+                color: '#67C23A'
+              })
+            } else {
+              this.judgeAnswerAna.push({
+                isCorrect: false,
+                answer: item,
+                color: '#F56C6C'
+              })
+            }
+          })
+          // 欣赏题答案解析
+          rightAnswer[2].forEach((item, index) => {
+            if(item === this.admiringAnswer[index]) {
+              this.admiringAnswerAna.push({
+                isCorrect: true,
+                answer: item,
+                color: '#67C23A'
+              })
+            } else {
+              this.admiringAnswerAna.push({
+                isCorrect: false,
+                answer: item,
+                color: '#F56C6C'
+              })
+            }
+          })
         }
       }).catch((err) => {
         console.log(`提交试卷失败 ${err}`)
@@ -269,7 +381,7 @@ export default {
           color: #657180;
           text-decoration: none;
           &:hover {
-            color: red;
+            color: #F56C6C;
           }
         }
         .test_student {
@@ -288,7 +400,7 @@ export default {
           font-size: 30px;
           text-align: right;
           span {
-            color: red;
+            color: #F56C6C;
             font-size: 45px;
           }
         }
@@ -299,6 +411,13 @@ export default {
           }
           .item {
             margin: 10px 20px;
+          }
+        }
+        .test__image {
+          margin: 10px auto;
+          max-width: 400px;
+          img {
+            width: 100%;
           }
         }
         .test__handle {
