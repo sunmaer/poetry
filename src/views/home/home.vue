@@ -1,62 +1,15 @@
 <template>
   <el-row class="home">
     <el-row class="home__container">
-      <el-col span="12" class="home__link"><a href="http://www.szchengnan.com/" target="_blank">嵊州市城南小学欢迎你</a></el-col>
-      <el-col span="12" class="home__test">
+      <el-col :span="12" class="home__link"><a href="http://www.szchengnan.com/" target="_blank">嵊州市城南小学欢迎你</a></el-col>
+      <el-col :span="12" class="home__test">
         <router-link :to="{ path: '/login' }">管理员登录</router-link>&nbsp;&nbsp;
         <a href="javascript:void(0);" @click="dialogVisible = true">{{ type }}在线测试 <i class="fa fa-arrow-circle-o-right"></i></a>
       </el-col>
-      <el-col span="24">
+      <el-col :span="24">
         <img class="home__logo" src="../../assets/logo.jpg" alt="校园全景">
       </el-col>
     </el-row>
-
-    <el-dialog
-      title="登录/注册"
-      :visible.sync="LoginVisible"
-      width="25%">
-      <el-tabs type="card">
-        <el-tab-pane label="学生登录">
-          <el-form ref="form" :model="loginForm" label-width="60px">
-            <el-form-item label="姓名">
-              <el-input v-model="loginForm.name" placeholder="请输入姓名"></el-input>
-              <el-alert v-model="loginForm.nameAlert" v-if="loginForm.nameAlert!==''" type="warning" :closable="false">{{loginForm.nameAlert}}</el-alert>
-            </el-form-item>
-            <el-form-item label="班级">
-              <el-input v-model="loginForm.class" placeholder="请输入班级"></el-input>
-              <el-alert v-model="loginForm.classAlert" v-if="loginForm.classAlert!==''" type="warning" :closable="false">{{loginForm.classAlert}}</el-alert>
-            </el-form-item>
-            <el-form-item label="学号">
-              <el-input v-model="loginForm.id" placeholder="请输入学号"></el-input>
-              <el-alert v-model="loginForm.idAlert" v-if="loginForm.idAlert!==''" type="warning" :closable="false">{{loginForm.idAlert}}</el-alert>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="StudentLogin('loginForm')">登录</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="学生注册">
-          <el-form ref="form" :model="registerForm" label-width="60px">
-            <el-form-item label="姓名">
-              <el-input v-model="registerForm.name" placeholder="请输入姓名"></el-input>
-              <el-alert v-model="registerForm.nameAlert" v-if="registerForm.nameAlert!==''" type="warning" :closable="false">{{registerForm.nameAlert}}</el-alert>
-            </el-form-item>
-            <el-form-item label="班级">
-              <el-input v-model="registerForm.class" placeholder="请输入班级 格式3-2 为3年2班"></el-input>
-              <el-alert v-model="registerForm.classAlert" v-if="registerForm.classAlert!==''" type="warning" :closable="false">{{registerForm.classAlert}}</el-alert>
-
-            </el-form-item>
-            <el-form-item label="学号">
-              <el-input v-model="registerForm.id" placeholder="请输入学号"></el-input>
-              <el-alert v-model="registerForm.ideAlert" v-if="registerForm.idAlert!==''" type="warning" :closable="false">{{registerForm.idAlert}}</el-alert>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="StudentRegister">注册</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-      </el-tabs>
-    </el-dialog>
 
     <el-dialog
       title="选择题量"
@@ -67,8 +20,7 @@
       <el-row class="test__num">
         <span>选择题：</span>
         <el-input-number 
-          v-model="num1" 
-          @change="handleChange" 
+          v-model="num1"
           :min="0" 
           :max="number"
           size="small" 
@@ -78,8 +30,7 @@
       <el-row class="test__num">
         <span>判断题：</span>
         <el-input-number 
-          v-model="num2" 
-          @change="handleChange" 
+          v-model="num2"
           :min="0" 
           :max="number"
           size="small" 
@@ -89,8 +40,7 @@
       <el-row class="test__num">
         <span>欣赏题：</span>
         <el-input-number 
-          v-model="num3" 
-          @change="handleChange" 
+          v-model="num3"
           :min="0" 
           :max="number"
           size="small" 
@@ -117,25 +67,6 @@
     },
     data () {
       return {
-        loginForm:{
-          name:'',
-          class:'',
-          id:'',
-          nameAlert:'',
-          classAlert:'',
-          idAlert:'',
-          error:''
-        },
-        registerForm:{
-          name:'',
-          class:'',
-          id:'',
-          nameAlert:'',
-          classAlert:'',
-          idAlert:''
-        },
-        isLogin:true,
-        LoginVisible: false,
         type: '越韵古诗',
         dialogVisible: false,
         number: 50,
