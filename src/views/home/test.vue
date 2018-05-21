@@ -141,6 +141,7 @@ export default {
     this.admiringNum = this.$route.query.admiring || 0
 
     // 获取题库
+    this.$axios.defaults.withCredentials=true;
     this.$axios({
       method: 'POST',
       url: `${API_HOST}Poetry/Library`,
