@@ -5,19 +5,18 @@
       <div slot="header" class="login__header">
         <span> <i class="fa fa-sign-in"></i> 欢迎登录 越韵古诗</span>
       </div>
-      <el-form :model="formLabelAlign">
+      <el-form :model="loginForm">
         <el-form-item>
-          <el-input v-model="formLabelAlign.name" prefix-icon="fa fa-user fa-lg" placeholder="请输入用户名"></el-input>
+          <el-input v-model="loginForm.name" prefix-icon="fa fa-user fa-lg" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-input type="password" v-model="formLabelAlign.region"  prefix-icon="fa fa-lock fa-lg" placeholder="请输入密码"></el-input>
-          <el-alert v-model="formLabelAlign.alert" v-if="formLabelAlign.alert!==''" type="warning" :closable="false">{{formLabelAlign.alert}}</el-alert>
+          <el-input type="password" v-model="loginForm.password"  prefix-icon="fa fa-lock fa-lg" placeholder="请输入密码"></el-input>
         </el-form-item>
         <!-- <el-form-item prop="type">
           <el-checkbox label="记住密码" v-model="formLabelAlign.type"></el-checkbox>
         </el-form-item> -->
         <el-form-item>
-          <el-button type="primary" class="login__button" @click="login('formLabelAlign')">登录</el-button>
+          <el-button type="primary" class="login__button" @click="login()">登录</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -35,11 +34,9 @@
     // 变量
     data () {
       return {
-        formLabelAlign: {
+        loginForm: {
           name: '',
-          region: '',
-          type: false,
-          alert:''
+          password:'',
         },
       }
     },
@@ -49,17 +46,31 @@
     // 方法 
     watch: {},
     methods: {
-      login (formName) {
-        this.$router.push({ path: '/admin/index' })
-        if(this.formLabelAlign.name == ''){
-          return;
+      login () {
+        //登陆验证
+        if(!this.loginForm.name || !this.loginForm.password){
+          this.$message.warning('请填写完整登录信息');
+          return false;
         }
-        if(this.formLabelAlign.region == ''){
-          this.formLabelAlign.alert = '请输入密码';
-          return;
-        }
-        this.formLabelAlign.alert = '';
-        if(this.formLabelAlign.type === true){
+        this.$axios({
+          method: 'POST',
+          url: `${API_HOST}Admin/Login`,
+          data: {
+            name: this.loginForm.name,
+            password: this.loginForm.password
+          }
+        }).then((res) => {
+          if(!res.data.status) {
+            this.$message.error(res.data.msg)
+          } else {
+            localStorage.setItem('adminName',this.loginForm.name)
+            this.$message.success(res.data.msg)
+            this.$router.push({path:'/admin/index'})
+          }
+        }).catch((err) => {
+          this.$message.error(`登录失败 ${err}`)
+        })
+/*        if(this.formLabelAlign.type === true){
           console.log(this.formLabelAlign.type);
           //传入账号名，密码，和保存天数3个参数
           this.setCookie(this.formLabelAlign.name, this.formLabelAlign.region, 7); 
@@ -84,7 +95,7 @@
           .catch(function(err){
             console.log(err);
             alert("登录失败，请检查登录信息");
-          });
+          }); */
       },
         //设置cookie
       setCookie(c_name, c_region, exdays){

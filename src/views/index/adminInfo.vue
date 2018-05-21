@@ -5,7 +5,7 @@
         <img src="https://avatars0.githubusercontent.com/u/18280125?s=460&v=4" alt="用户图像">
       </el-col>
       <el-col :span="14" class="admin__name">
-        Admin{{adminName}}
+        {{adminName}}
       </el-col>
     </el-row>
     <el-row class="admin__ip">
@@ -21,18 +21,21 @@
 import axios from 'axios'
 
 export default{
+
   data () {
     return{
       adminName:'',
       onlineIP:''
     }
   },
+  created:function(){
+
+  },
   mounted(){
     this.adminName = localStorage.getItem('adminName');
     var self = this;
     axios.get('http://ip.wheff7.com/ipinfo')
     .then(function(res){
-      console.log(res.data.onlineip);
       if(res.status == 200){
         self.onlineIP = res.data.onlineip;
       }

@@ -23,9 +23,8 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="id"
-        label="序号"
-        width="60">
+        type="index"
+        width="50">
       </el-table-column>
       <el-table-column
         prop="type"
@@ -48,9 +47,9 @@
         prop="image"
         label="题目图片"
         width="120">
-        <template slot-scope="scope" v-if="scope.row.type != 2">
+        <template slot-scope="scope" v-if="scope.row.type != 2 && scope.row.image">
           <el-popover trigger="hover" placement="top">
-            <img  :src="scope.row.image" alt="" style="width: 40%;height: 40%">
+            <img :src="'//' + scope.row.image" alt="古诗配图" style="width: 150px;height: 150px">
             <div slot="reference" class="name-wrapper">
               <el-tag size="medium">查看图片</el-tag>
             </div>
@@ -301,42 +300,13 @@ import axios from 'axios'
           label: 'F',
           disabled: true
         }],
-        tableData3: [{
-          type:0,
-          id:1,
-          question: '1+1=?',
-          option: ['2', '3', '4', '5'],
-          answer: 1,
-          analysis: '简单的数学运算',
-          image: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=635704053,1460945271&fm=27&gp=0.jpg',
-          video:''
-        },{
-          type:1,
-          id:2,
-          question: '1+1=?',
-          option: ['2', '3', '4', '5'],
-          answer: '1',
-          analysis: '简单的数学运算',
-          image: 'www.baidu.com',
-          video:''
-        },{
-          type:2,
-          id:3,
-          question: '1+1=?',
-          option: ['2', '3', '4', '5'],
-          answer: '1',
-          analysis: '简单的数学运算',
-          image:'',
-          video: 'www.baidu.com'
-        }
-        ],
+        tableData3: [],
         oldtableData:[]
       }
     },
 
     methods: {
       search:function(){
-        console.log(this.formInline.name);
         if(this.formInline.name == ''){
           this.tableData3 = this.oldtableData;
         }else{
@@ -434,51 +404,39 @@ import axios from 'axios'
         }
       },
       getQuestion:function(){
-        var questionArray = new Array({
-          id:'2',
-          type:'0',
-          question:'1+1=?',
-          option:['1','2','3','4'],
-          answer:'1',
-          analysis:'1',
-          image:'1'
-        });
+        var questionArray = new Array();
         var newNode = new Array({
-          id:'1',
-          type:'1',
-          question:'1+2=3',
-          option:['1','2','3','4'],
-          answer:'1',
-          analysis:'1',
-          image:'1'
+          id:'',
+          type:'',
+          question:'',
+          option:[],
+          answer:'',
+          analysis:'',
+          image:''
         });
-        for(var i=0;i<100;i++){
-          questionArray.push.apply(questionArray,newNode);
-        }
-        this.tableData3 = questionArray;
-        this.oldtableData = this.tableData3;
         let self = this;
-        axios.get(API_HOST+'QuestionList')
+        this.$axios.get(API_HOST+'QuestionList')
         .then(function(res){
           res = res.data;
           console.log(res);
-          if(res.status = true){
+          if(res.status == true){
             for(var i=0;i<res.data.choice.length;i++){
               newNode = res.data.choice[i];
               newNode.type = '0';
-              questionArray.push.apply(questionArray,newNode);
+              questionArray.push(newNode);
             }
             for(var i=0;i<res.data.judge.length;i++){
               newNode = res.data.judge[i];
-              newNode.type = '1';
-              questionArray.push.apply(questionArray,newNode);
+              newNode.type = '1'
+              questionArray.push(newNode);
             }
             for(var i=0;i<res.data.admiring.length;i++){
               newNode = res.data.admiring[i];
-              newNode.type = '2';
-              questionArray.push.apply(questionArray,newNode);
+              newNode.type = '2'
+              questionArray.push(newNode);
             }
             self.tableData3 = questionArray;
+            self.oldtableData = self.tableData3;
           }
         })
       },
@@ -505,7 +463,8 @@ import axios from 'axios'
           var rightarr = new Array('F','T');
           this.$set(this.newform,'answer',rightarr[parseInt(row.answer)]);
         }else{
-          this.$set(this.newform,'answer',row.answer);
+          var rightarr = new Array(0,'A','B','C','D');
+          this.$set(this.newform,'answer',rightarr[parseInt(row.answer)]);
         }
         this.newform.analysis = row.analysis;
       },
