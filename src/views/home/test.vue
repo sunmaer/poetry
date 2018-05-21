@@ -338,7 +338,7 @@ export default {
       if(type === 'choice') {
         return this.choiceAnswerAna[index].isCorrect ?
           '答案正确' :
-          '答案错误，正确答案为：' + this.choice[index].option[this.choiceAnswerAna[index].answer]
+          '答案错误，正确答案为：' + this.choice[index].option[this.choiceAnswerAna[index].answer-1]
       } else if(type === 'judge') {
         return this.judgeAnswerAna[index].isCorrect ?
           '答案正确' : 
@@ -346,7 +346,7 @@ export default {
       } else {
         return this.admiringAnswerAna[index].isCorrect ?
           '答案正确' :
-          '答案错误，正确答案为：' + this.admiring[index].option[this.admiringAnswerAna[index].answer]
+          '答案错误，正确答案为：' + this.admiring[index].option[this.admiringAnswerAna[index].answer-1]
       }
     }
   }
