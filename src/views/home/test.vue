@@ -18,7 +18,7 @@
           <el-row v-for="(choice,index) in choice" :key="index" class="question__item">
             <h4>{{index+1}}. {{choice.question}}</h4>
             <div v-if="choice.image" class="test__image">
-              <img :src="choice.image" alt="古诗配图">
+              <img :src="'//' + choice.image" alt="古诗配图">
             </div>
             <el-radio-group :disabled="disable" v-model="choiceAnswer[index]" class="item" >
               <el-radio :label="1">{{choice.option && choice.option[0]}}</el-radio>
@@ -35,7 +35,7 @@
           <el-row v-for="(judge,index) in judge" :key="index" class="question__item">
             <h4>{{index+1}}. {{judge.question}}</h4>
             <div v-if="judge.image" class="test__image">
-              <img :src="judge.image" alt="古诗配图">
+              <img :src="'//' + judge.image" alt="古诗配图">
             </div>
             <el-radio-group :disabled="disable" v-model="judgeAnswer[index]" class="item">
               <el-radio :label="1">正确</el-radio>
@@ -50,7 +50,7 @@
           <el-row v-for="(admiring,index) in admiring" :key="index" class="question__item">
             <h4>{{index+1}}. {{admiring.question}}</h4>
             <div v-if="admiring.image" class="test__image">
-              <img :src="admiring.image" alt="古诗配图">
+              <img :src="'//' + admiring.image" alt="古诗配图">
             </div>
             <el-radio-group :disabled="disable" v-model="admiringAnswer[index]" class="item">
               <el-radio :label="1">{{admiring.option && admiring.option[0]}}</el-radio>
@@ -69,40 +69,40 @@
     </el-row>
     
     <el-dialog
-      title="学生登录/注册"
+      title="登录/注册"
       :visible.sync="LoginVisible"
       center
-      width="40%">
+      width="400px">
       <el-tabs>
         <el-tab-pane label="学生登录">
-          <el-form ref="form" :model="loginForm" label-width="60px">
-            <el-form-item label="姓名">
+          <el-form ref="form" :model="loginForm">
+            <el-form-item>
               <el-input v-model="loginForm.name" placeholder="请输入姓名"></el-input>
             </el-form-item>
-            <el-form-item label="班级">
+            <el-form-item>
               <el-input v-model="loginForm.class" placeholder="请输入班级"></el-input>
             </el-form-item>
-            <el-form-item label="学号">
+            <el-form-item>
               <el-input v-model="loginForm.id" placeholder="请输入学号"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="login">登录</el-button>
+              <el-button class="test__btn" type="primary" @click="login">登录</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="学生注册">
-          <el-form ref="form" :model="registerForm" label-width="60px">
-            <el-form-item label="姓名">
+          <el-form ref="form" :model="registerForm">
+            <el-form-item>
               <el-input v-model="registerForm.name" placeholder="请输入姓名"></el-input>
             </el-form-item>
-            <el-form-item label="班级">
+            <el-form-item>
               <el-input v-model="registerForm.class" placeholder="请输入班级，例如101"></el-input>
             </el-form-item>
-            <el-form-item label="学号">
+            <el-form-item>
               <el-input v-model="registerForm.id" placeholder="请输入学号"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="register">注册</el-button>
+              <el-button class="test__btn" type="primary" @click="register">注册</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -177,28 +177,12 @@ export default {
         this.choice = res.data.data.choice
         this.judge = res.data.data.judge
         this.admiring = res.data.data.admiring
+      } else {
+        this.$message.error(res.data.msg)
       }
     }).catch((err) => {
       this.$message.error(`题库获取失败 ${err}`)
     })
-  },
-  computed: {
-    getRightAnswer (type, index) {
-      if(type === 'choice') {
-        console.log(this.choiceAnswerAna[index])
-        return this.choiceAnswerAna[index].isCorrect ?
-          '答案正确' : 
-          '答案错误，正确答案为：' + this.choice[index].option[this.choiceAnswerAna[index].answer]
-      } else if(type === 'judge') {
-        return this.judgeAnswerAna[index].isCorrect ?
-          '答案正确' : 
-          '答案错误，正确答案为：' + this.judge[index].option[this.choiceAnswerAna[index].answer] === 1 ? '正确' : '错误'
-      } else {
-        return this.admiringAnswerAna[index].isCorrect ?
-          '答案正确' : 
-          '答案错误，正确答案为：' + this.admiring[index].option[this.admiringAnswerAna[index].answer]
-      }
-    }
   },
   methods:{
     login(){
@@ -256,10 +240,10 @@ export default {
     },
     submit:function(){
       // 登录才可以提交试卷
-      // if(!this.isLogin) {
-      //   this.$message.warning('登录以后才可以提交试卷')
-      //   return false
-      // }
+      if(!this.isLogin) {
+        this.$message.warning('登录以后才可以提交试卷')
+        return false
+      }
       // 试卷完成才能提交
       if(this.choiceAnswer.length !== +this.choiceNum || 
         this.judgeAnswer.length !== +this.judgeNum || 
@@ -271,7 +255,7 @@ export default {
         method: 'POST',
         url: `${API_HOST}Poetry/Grade`,
         data: {
-          id: 250,
+          id: this.id,
           answer: [this.choiceAnswer, this.judgeAnswer, this.admiringAnswer]
         }
       }).then((res) => {
@@ -350,6 +334,21 @@ export default {
         console.log(`提交试卷失败 ${err}`)
       })
     },
+    getRightAnswer (type, index) {
+      if(type === 'choice') {
+        return this.choiceAnswerAna[index].isCorrect ?
+          '答案正确' :
+          '答案错误，正确答案为：' + this.choice[index].option[this.choiceAnswerAna[index].answer]
+      } else if(type === 'judge') {
+        return this.judgeAnswerAna[index].isCorrect ?
+          '答案正确' : 
+          ('答案错误，正确答案为：' + this.judgeAnswerAna[index].answer === 1 ? '正确' : '错误')
+      } else {
+        return this.admiringAnswerAna[index].isCorrect ?
+          '答案正确' :
+          '答案错误，正确答案为：' + this.admiring[index].option[this.admiringAnswerAna[index].answer]
+      }
+    }
   }
 }
 </script>
@@ -425,6 +424,9 @@ export default {
           text-align: center;
         }
       }
+    }
+    .test__btn {
+      width: 100%;
     }
   }
 </style>

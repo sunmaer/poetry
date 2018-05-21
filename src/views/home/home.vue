@@ -69,10 +69,10 @@
       return {
         type: '越韵古诗',
         dialogVisible: false,
-        number: 50,
-        num1: 10,
-        num2: 10,
-        num3: 10
+        number: 0,
+        num1: 5,
+        num2: 5,
+        num3: 5
       }
     },
     computed:{
@@ -87,24 +87,36 @@
     },
     methods: {
       confirm () {
-        // if(this.num1+this.num2+this.num3 != this.number){
-        //   this.$message({
-        //     message:'题目数不符合要求',
-        //     type:'warning'
-        //   });
-        //   return false;
-        // }
+        if(this.num1+this.num2+this.num3 != this.number){
+          this.$message({
+            message:'题目数不符合要求',
+            type:'warning'
+          });
+          return false;
+        }
         this.$router.push({path:'/test',query:{total:this.number,choice:this.num1,judge:this.num2,admiring:this.num3}});
       }
     },
     //页面加载读取题目数量
     mounted () {
-      var self = this;
       axios.get(API_HOST+'Global/QuestionNum')
-      .then(function(res){
+      .then((res) => {
         res = res.data;
         if(res.status == true){
-          self.number = parseInt(res.questionNum);
+          this.number = parseInt(res.questionNum)
+          if(this.number === 20) {
+            this.num1 = 10
+            this.num2 = 5
+            this.num3 = 5
+          } else if(this.number === 25) {
+            this.num1 = 10
+            this.num2 = 10
+            this.num3 = 5 
+          } else {
+            this.num1 = 20
+            this.num2 = 20
+            this.num3 = 10
+          }
         }
       })
     }

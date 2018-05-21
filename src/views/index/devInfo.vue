@@ -6,7 +6,7 @@
     </div>
     <div>数据库：MySql</div>
     <div>服务器：Windows Server</div>
-    <div>开发人员：孙梦海 曹浩</div>
+    <div>开发人员：孙梦海 黄穗宇 张晶波</div>
   </el-card>
 </template>
 

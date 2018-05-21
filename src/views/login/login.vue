@@ -13,9 +13,9 @@
           <el-input type="password" v-model="formLabelAlign.region"  prefix-icon="fa fa-lock fa-lg" placeholder="请输入密码"></el-input>
           <el-alert v-model="formLabelAlign.alert" v-if="formLabelAlign.alert!==''" type="warning" :closable="false">{{formLabelAlign.alert}}</el-alert>
         </el-form-item>
-        <el-form-item prop="type">
+        <!-- <el-form-item prop="type">
           <el-checkbox label="记住密码" v-model="formLabelAlign.type"></el-checkbox>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" class="login__button" @click="login('formLabelAlign')">登录</el-button>
         </el-form-item>
@@ -50,6 +50,7 @@
     watch: {},
     methods: {
       login (formName) {
+        this.$router.push({ path: '/admin/index' })
         if(this.formLabelAlign.name == ''){
           return;
         }
@@ -79,7 +80,6 @@
               alert("管理员成功");
               router.push({ path: '/admin/index' });
             }
-            
           })
           .catch(function(err){
             console.log(err);
