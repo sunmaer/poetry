@@ -26,7 +26,10 @@
               <el-radio :label="3">{{choice.option && choice.option[2]}}</el-radio>
               <el-radio :label="4">{{choice.option && choice.option[3]}}</el-radio>
             </el-radio-group>
-            <h4 v-if="showAnswer && choiceAnswerAna[index]" :style="{color: choiceAnswerAna[index].color, margin: '10px 0 10px 20px'}">{{ getRightAnswer('choice', index) }}</h4>
+            <h4 v-if="showAnswer && choiceAnswerAna[index]" :style="{color: choiceAnswerAna[index].color, margin: '10px 0 0 20px'}">{{ getRightAnswer('choice', index) }}</h4>
+            <div class="test__ana" v-if="showAnswer && choice.analysis && choice.analysis !== 'undefined'">
+              解析：{{ choice.analysis }}
+            </div>
           </el-row>
         </section>
 
@@ -41,7 +44,10 @@
               <el-radio :label="1">正确</el-radio>
               <el-radio :label="0">错误</el-radio>
             </el-radio-group>
-            <h4 v-if="showAnswer && judgeAnswerAna[index]" :style="{color: judgeAnswerAna[index].color, margin: '10px 0 10px 20px'}">{{ getRightAnswer('judge', index) }}</h4>
+            <h4 v-if="showAnswer && judgeAnswerAna[index]" :style="{color: judgeAnswerAna[index].color, margin: '10px 0 0 20px'}">{{ getRightAnswer('judge', index) }}</h4>
+            <div class="test__ana" v-if="showAnswer && judge.analysis && judge.analysis !== 'undefined'">
+              解析：{{ judge.analysis }}
+            </div>
           </el-row>
         </section>
 
@@ -58,7 +64,10 @@
               <el-radio :label="3">{{admiring.option && admiring.option[2]}}</el-radio>
               <el-radio :label="4">{{admiring.option && admiring.option[3]}}</el-radio>
             </el-radio-group>
-            <h4 v-if="showAnswer && admiringAnswerAna[index]" :style="{color: admiringAnswerAna[index].color, margin: '10px 0 10px 20px'}">{{ getRightAnswer('admiring', index) }}</h4>            
+            <h4 v-if="showAnswer && admiringAnswerAna[index]" :style="{color: admiringAnswerAna[index].color, margin: '10px 0 0 20px'}">{{ getRightAnswer('admiring', index) }}</h4>            
+            <div class="test__ana" v-if="showAnswer && admiring.analysis && admiring.analysis !== 'undefined'">
+              解析：{{ admiring.analysis }}
+            </div>
           </el-row>
         </section>
 
@@ -420,6 +429,10 @@ export default {
           img {
             width: 100%;
           }
+        }
+        .test__ana {
+          margin: 10px 20px;
+          line-height: 25px;
         }
         .test__handle {
           margin: 40px 0 20px;
