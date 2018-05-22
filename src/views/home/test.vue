@@ -26,7 +26,7 @@
               <el-radio :label="3">{{choice.option && choice.option[2]}}</el-radio>
               <el-radio :label="4">{{choice.option && choice.option[3]}}</el-radio>
             </el-radio-group>
-            <h4 v-if="showAnswer && choiceAnswerAna[index]" :style="{color: choiceAnswerAna[index].color}">{{ getRightAnswer('choice', index) }}</h4>
+            <h4 v-if="showAnswer && choiceAnswerAna[index]" :style="{color: choiceAnswerAna[index].color, margin: '10px 0 10px 20px'}">{{ getRightAnswer('choice', index) }}</h4>
           </el-row>
         </section>
 
@@ -41,7 +41,7 @@
               <el-radio :label="1">正确</el-radio>
               <el-radio :label="0">错误</el-radio>
             </el-radio-group>
-            <h4 v-if="showAnswer && judgeAnswerAna[index]" :style="{color: judgeAnswerAna[index].color}">{{ getRightAnswer('judge', index) }}</h4>
+            <h4 v-if="showAnswer && judgeAnswerAna[index]" :style="{color: judgeAnswerAna[index].color, margin: '10px 0 10px 20px'}">{{ getRightAnswer('judge', index) }}</h4>
           </el-row>
         </section>
 
@@ -58,7 +58,7 @@
               <el-radio :label="3">{{admiring.option && admiring.option[2]}}</el-radio>
               <el-radio :label="4">{{admiring.option && admiring.option[3]}}</el-radio>
             </el-radio-group>
-            <h4 v-if="showAnswer && admiringAnswerAna[index]" :style="{color: admiringAnswerAna[index].color}">{{ getRightAnswer('admiring', index) }}</h4>            
+            <h4 v-if="showAnswer && admiringAnswerAna[index]" :style="{color: admiringAnswerAna[index].color, margin: '10px 0 10px 20px'}">{{ getRightAnswer('admiring', index) }}</h4>            
           </el-row>
         </section>
 
@@ -341,9 +341,10 @@ export default {
           '答案正确' :
           '答案错误，正确答案为：' + this.choice[index].option[this.choiceAnswerAna[index].answer-1]
       } else if(type === 'judge') {
+        let answer = this.judgeAnswerAna[index].answer === 1 ? '正确' : '错误'
         return this.judgeAnswerAna[index].isCorrect ?
           '答案正确' : 
-          ('答案错误，正确答案为：' + this.judgeAnswerAna[index].answer === 1 ? '正确' : '错误')
+          '答案错误，正确答案为：' + answer
       } else {
         return this.admiringAnswerAna[index].isCorrect ?
           '答案正确' :
