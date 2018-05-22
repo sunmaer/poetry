@@ -39,7 +39,6 @@ const store = new Vuex.Store({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(to.meta.requireAuth, store.state.adminName, to.path)
   store.commit('getAdmin')
   if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
     if (store.state.adminName != '') {  // 通过vuex state获取当前的admin，判断是否为空
