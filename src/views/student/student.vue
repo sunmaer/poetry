@@ -240,7 +240,7 @@ import axios from 'axios'
           }
         })
         .catch((err) => {
-          this.$message.error(`删除失败 ${err}`);
+          this.$message.error(`更新失败 ${err}`);
         });
       }
     }

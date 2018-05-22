@@ -48,17 +48,15 @@
       DevInfo,
       GradeInfo
     },
-    mounted () {
+    created(){
       this.questionNum = 40;
       this.studentNum = 412;
       this.poetryNum = 120;
       axios.get(API_HOST+'Global/Index')
       .then((res) => {
         if(!res.data.status) {
-          this.$message.error(res.data.msg)
         } else {
-          this.$message.success(res.data.msg)
-          this.questionNum = parseInt(res.data.questionNum[0])+parseInt(res.data.questionNum[1])+parseInt(res.data.questionNum[2])
+          this.questionNum = res.data.questionNum
           this.studentNum = res.data.studentNum
           this.poetryNum = res.data.poetryNum
         }
