@@ -21,13 +21,13 @@ export default new Router({
       component: Home
     },
     {
-      path: '/test',
+      path: '/testq',
       name: 'Test',
       component: Test
     },
     // 后台页面
     {
-      path: '/login',
+      path: '/loginq',
       name: 'Login',
       component: Login
     },
