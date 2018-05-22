@@ -34,13 +34,16 @@ export default new Router({
     {
       path: '/admin/',
       component: Admin,
+      meta: {
+        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+      },
       children: [
-        { path: '', component: Index },
-        { path: 'index', component: Index },
-        { path: 'question', component: Question },
-        { path: 'student', component: Student },
-        { path: 'administor', component: Administor },
-        { path: 'self', component: Self }
+        { path: '', meta: { requireAuth: true }, component: Index },
+        { path: 'index', meta: { requireAuth: true }, component: Index },
+        { path: 'question', meta: { requireAuth: true }, component: Question },
+        { path: 'student', meta: { requireAuth: true }, component: Student },
+        { path: 'administor', meta: { requireAuth: true }, component: Administor },
+        { path: 'self', meta: { requireAuth: true }, component: Self }
       ]
     }
   ]

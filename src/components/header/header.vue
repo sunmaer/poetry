@@ -30,11 +30,11 @@
       }
     },
     created:function(){
-      this.username = localStorage.getItem('adminName');
+      this.username = sessionStorage.getItem('adminName');
     },
     methods:{
       adminExit(){
-        localStorage.removeItem('adminName');
+        sessionStorage.removeItem('adminName');
         this.$message.success('退出成功');
         this.$router.push({path:'/'});
       }

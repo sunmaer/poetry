@@ -63,7 +63,7 @@
           if(!res.data.status) {
             this.$message.error(res.data.msg)
           } else {
-            localStorage.setItem('adminName',this.loginForm.name)
+            sessionStorage.setItem('adminName',this.loginForm.name)
             this.$message.success(res.data.msg)
             this.$router.push({path:'/admin/index'})
           }

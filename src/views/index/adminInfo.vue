@@ -32,7 +32,7 @@ export default{
 
   },
   mounted(){
-    this.adminName = localStorage.getItem('adminName');
+    this.adminName = sessionStorage.getItem('adminName');
     var self = this;
     axios.get('http://ip.wheff7.com/ipinfo')
     .then(function(res){
