@@ -40,7 +40,6 @@
           <span slot="title">管理员</span>
         </template>
         <el-menu-item index="/admin/administor">管理员列表</el-menu-item>
-        <el-menu-item index="/admin/self">个人中心</el-menu-item>
       </el-submenu>
     </el-menu>
   </el-aside>

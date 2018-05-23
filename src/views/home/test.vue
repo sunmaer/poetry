@@ -8,6 +8,7 @@
           <span class="test_student">学号：{{this.id}}</span>
           <span class="test_student">姓名：{{this.name}}</span>
           <span class="test_student">班级：{{this.class}}</span>
+          <el-button type="text" @click="studentExit">退出登录</el-button>
         </template>
       </div>
     
@@ -57,6 +58,14 @@
             <h4>{{index+1}}. {{admiring.question}}</h4>
             <div v-if="admiring.image" class="test__image">
               <img :src="'//' + admiring.image" alt="古诗配图">
+            </div>
+            <div v-if="admiring.video" class="test__video">
+              <video-player  class="video-player-box"
+                  ref="videoPlayer"
+                  :options="playerOptions[index]"
+                  :playsinline="true"
+                  customEventName="customstatechangedeventname">
+              </video-player>
             </div>
             <el-radio-group :disabled="disable" v-model="admiringAnswer[index]" class="item">
               <el-radio :label="1">{{admiring.option && admiring.option[0]}}</el-radio>
@@ -122,6 +131,10 @@
 
 <script>
 import axios from 'axios'
+import 'video.js/dist/video-js.css'
+import videojs from 'video.js'
+import { videoPlayer } from 'vue-video-player'
+
 export default {
   data () {
     return {
@@ -163,7 +176,18 @@ export default {
       admiring:[],
       admiringNum: 0,
       admiringAnswer: [],
-      admiringAnswerAna: []
+      admiringAnswerAna: [],
+      playerOptions: [{
+        // videojs options
+        language: 'zh-CN',
+        sources: [{
+          type: "video/mp4",
+          src: "http://www.w3school.com.cn/example/html5/mov_bbb.mp4"
+        }],
+        poster: "/static/images/author.jpg",
+        height:400,
+        width:540
+      }]
     }
   },
   created:function(){
@@ -172,6 +196,19 @@ export default {
     this.choiceNum = this.$route.query.choice || 0
     this.judgeNum = this.$route.query.judge || 0
     this.admiringNum = this.$route.query.admiring || 0
+
+    var videoNode = {
+      // videojs options
+      language: 'zh-CN',
+      sources: [{
+        type: "video/mp4",
+        src: "http://www.w3school.com.cn/example/html5/mov_bbb.mp4"
+      }],
+      poster: "/static/images/author.jpg",
+      height:400,
+      width:540
+    }
+
 
     // 获取题库
     this.$axios.defaults.withCredentials=true;
@@ -186,12 +223,30 @@ export default {
         this.choice = res.data.data.choice
         this.judge = res.data.data.judge
         this.admiring = res.data.data.admiring
+        for(var i = 0; i < this.admiring.length -1 ; i++){
+          this.playerOptions.push(videoNode);
+        }
+        for(var i = 0; i < this.playerOptions.length; i++){
+          console.log(this.admiring[i].video)
+          if(this.admiring[i].video){
+            this.playerOptions[i].poster = '//'+this.admiring[i].video;
+          }
+        }
+        console.log(this.playerOptions);
       } else {
         this.$message.error(res.data.msg)
       }
     }).catch((err) => {
       this.$message.error(`题库获取失败 ${err}`)
     })
+  },
+  components: {
+    videoPlayer
+  },
+  computed: {
+    player() {
+      return this.$refs.videoPlayer.player
+    }
   },
   methods:{
     login(){
@@ -246,6 +301,23 @@ export default {
       }).catch((err) => {
         this.$message.error(`注册失败 ${err}`)
       })
+    },
+    studentExit(){
+      //学生退出登录
+      this.$confirm('是否确认退出当前账号', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.isLogin = false
+        this.name = ''
+        this.class = ''
+        this.id = ''
+        this.$message({
+          type: 'success',
+          message: '退出成功!'
+        });
+      })       
     },
     submit:function(){
       // 登录才可以提交试卷

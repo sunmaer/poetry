@@ -19,8 +19,10 @@
     "element-ui": "^2.0.7",
     "font-awesome": "^4.7.0",
     "node-sass": "^4.9.0",
+    "video.js": "^7.0.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
+    "vue-video-player": "^5.0.2",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -85,5 +87,18 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunmaer/poetry.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sunmaer/poetry/issues"
+  },
+  "homepage": "https://github.com/sunmaer/poetry#readme"
 }

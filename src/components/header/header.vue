@@ -13,8 +13,7 @@
             {{username}}<!--<img src="https://avatars0.githubusercontent.com/u/18280125?s=460&v=4" alt="用户图像" class="user__avatar"> -->
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><router-link to="/admin/self" style="text-decoration: none">个人中心</router-link></el-dropdown-item>
-            <el-dropdown-item  divided @click.native="adminExit">退出登录</el-dropdown-item>
+            <el-dropdown-item @click.native="adminExit">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-col>
