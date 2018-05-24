@@ -2,7 +2,7 @@
   <el-card class="admin"  :body-style="{ padding: '0px 20px' }">
     <el-row style="margin: 30px 0 30px 0;">
       <el-col :span="10" class="admin__avatar">
-        <img src="https://avatars0.githubusercontent.com/u/18280125?s=460&v=4" alt="用户图像">
+        <img src="../../assets/admin.jpg" alt="用户图像">
       </el-col>
       <el-col :span="14" class="admin__name">
         {{adminName}}

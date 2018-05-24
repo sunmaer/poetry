@@ -104,7 +104,6 @@
         //字符串拼接cookie
         window.document.cookie = "userName" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
         window.document.cookie = "userPwd" + "=" + c_region + ";path=/;expires=" + exdate.toGMTString();
-        console.log(window.document.cookie);
       },
       //读取cookie
       getCookie: function() {

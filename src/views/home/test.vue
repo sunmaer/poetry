@@ -19,7 +19,7 @@
           <el-row v-for="(choice,index) in choice" :key="index" class="question__item">
             <h4>{{index+1}}. {{choice.question}}</h4>
             <div v-if="choice.image" class="test__image">
-              <img :src="'//' + choice.image" alt="古诗配图">
+              <img :src="choice.image" alt="古诗配图" :onerror="errorImg"  @click="enlarge(choice.image)">
             </div>
             <el-radio-group :disabled="disable" v-model="choiceAnswer[index]" class="item" >
               <el-radio :label="1">{{choice.option && choice.option[0]}}</el-radio>
@@ -33,6 +33,17 @@
             </div>
           </el-row>
         </section>
+
+        <!-- 图片放大功能 -->
+        <el-dialog
+          title="图片"
+          :visible.sync="enlargeVisible"
+          width="70%">
+          <img :src="enlargeimg">
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          </span>
+        </el-dialog>
 
         <section>
           <h3>二、判断题（共{{judgeNum}}题，每题{{100 / +total}}分。请根据题目内容选择正确或者错误）</h3>
@@ -140,6 +151,9 @@ export default {
     return {
       isLogin: false,
       LoginVisible: true,
+      enlargeVisible: false,
+      enlargeimg:'',
+      enlargeimgWidth:300,
       grade: 0,
       level: '',
       showGrade: false,
@@ -177,17 +191,8 @@ export default {
       admiringNum: 0,
       admiringAnswer: [],
       admiringAnswerAna: [],
-      playerOptions: [{
-        // videojs options
-        language: 'zh-CN',
-        sources: [{
-          type: "video/mp4",
-          src: "http://www.w3school.com.cn/example/html5/mov_bbb.mp4"
-        }],
-        poster: "/static/images/author.jpg",
-        height:400,
-        width:540
-      }]
+      playerOptions: [],
+      errorImg: 'this.src="' + require('../../assets/seize.jpg') + '"'
     }
   },
   created:function(){
@@ -196,18 +201,6 @@ export default {
     this.choiceNum = this.$route.query.choice || 0
     this.judgeNum = this.$route.query.judge || 0
     this.admiringNum = this.$route.query.admiring || 0
-
-    var videoNode = {
-      // videojs options
-      language: 'zh-CN',
-      sources: [{
-        type: "video/mp4",
-        src: "http://www.w3school.com.cn/example/html5/mov_bbb.mp4"
-      }],
-      poster: "/static/images/author.jpg",
-      height:400,
-      width:540
-    }
 
 
     // 获取题库
@@ -221,18 +214,34 @@ export default {
     }).then((res) => {
       if(res.data.status) {
         this.choice = res.data.data.choice
-        this.judge = res.data.data.judge
-        this.admiring = res.data.data.admiring
-        for(var i = 0; i < this.admiring.length -1 ; i++){
-          this.playerOptions.push(videoNode);
-        }
-        for(var i = 0; i < this.playerOptions.length; i++){
-          console.log(this.admiring[i].video)
-          if(this.admiring[i].video){
-            this.playerOptions[i].poster = '//'+this.admiring[i].video;
+        //处理图片路径
+        for(var i = 0; i < this.choice.length; i++){     
+          if(this.choice[i].image){
+            var url = this.choice[i].image;
+            url = url.substr(0,7).toLowerCase() == "http://" ? url : "http://" + url;
+            this.choice[i].image = url;
           }
         }
-        console.log(this.playerOptions);
+        this.judge = res.data.data.judge
+        this.admiring = res.data.data.admiring
+        for(var i = 0; i < this.admiring.length; i++){
+          if(this.admiring[i].video){
+            var url = this.admiring[i].video;
+            url = url.substr(0,7).toLowerCase() == "http://" ? url : "http://" + url;
+          }
+          var videoNode = {
+            // videojs options
+            language: 'zh-CN',
+            sources: [{
+              type: "video/mp4",
+              src: url
+            }],
+            poster: "",
+            height:400,
+            width:540
+          }
+          this.playerOptions.push(videoNode);
+        }
       } else {
         this.$message.error(res.data.msg)
       }
@@ -413,7 +422,7 @@ export default {
           })
         }
       }).catch((err) => {
-        console.log(`提交试卷失败 ${err}`)
+        this.$message.error(`提交试卷失败 ${err}`)
       })
     },
     getRightAnswer (type, index) {
@@ -431,6 +440,12 @@ export default {
           '答案正确' :
           '答案错误，正确答案为：' + this.admiring[index].option[this.admiringAnswerAna[index].answer-1]
       }
+    },
+    enlarge(_this){
+      var img = new Image()
+      img.src = _this
+      this.enlargeVisible = true
+      this.enlargeimg = _this
     }
   }
 }

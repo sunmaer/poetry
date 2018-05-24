@@ -66,15 +66,15 @@ import axios from 'axios'
           axios.post(API_HOST+'Global/QuestionNum',{
             questionNum:this.number
           })
-          .then(function(res){
-            console.log(res);
-            if(res.status = true){
-              alert("修改成功");
+          .then((res) => {
+            if(res.data.status){
+              this.$message.success(res.data.msg)
+            }else{
+              this.$message.error('修改失败')
             }
           })
-          .catch(function(err){
-            console.log(err);
-            alert("修改失败，请检查信息");
+          .catch((err) => {
+            this.$message.error(err);
           });
         }
       }
