@@ -520,7 +520,14 @@ import axios from 'axios'
           fd.append('answer',answer)
           fd.append('analysis',analysis)
 
-          this.$axios.post(API_HOST+"Poetry/UpdateN",fd)
+          this.$axios.post(API_HOST+"Poetry/UpdateN",{
+            id:id,
+            type:type,
+            question:question,
+            option:option,
+            answer:answer,
+            analysis:analysis
+          })
           .then((res) => {
             if(res.data.status){
               this.$message.success(res.data.msg)
@@ -634,10 +641,12 @@ import axios from 'axios'
           fd.append('analysis',analysis)
 
 
-          this.$axios.post(API_HOST+"Poetry/Add", fd,{
-            headers: {
-              "Content-Type": "multipart/form-data"
-            }
+          this.$axios.post(API_HOST+"Poetry/Add", {
+            type:type,
+            question:question,
+            option:option,
+            answer:answer,
+            analysis:analysis
           })
           .then((res) => {
             if(res.data.status){
