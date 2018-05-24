@@ -158,8 +158,11 @@
             ref="upload"
             :name="this.form.region == 'admiring' ? 'video':'image' "
             :action="API_HOST+'Poetry/Add'"
+            :on-change="fileChange"
             show-file-list
             :limit="1"
+            :file-list="filelist"
+            :on-remove="removefile"
             :before-upload="beforeUpload"
             :auto-upload="false">
             <el-button size="small" type="primary">点击上传</el-button>
@@ -213,12 +216,15 @@
         <el-form-item label="题目附件">
           <el-upload
             class="upload-demo"
-            :data="formatData()"
-            ref="upload"
+            :data="editformatData()"
+            ref="editupload"
             :name="this.form.region == 'admiring' ? 'video':'image' "
             :action="API_HOST+'Poetry/Update'"
+            :on-change="handleChange"
             show-file-list
             :limit="1"
+            :file-list="editfilelist"
+            :on-remove="removeEditfile"
             :before-upload="beforeEditUpload"
             :auto-upload="false">
             <el-button size="small" type="primary">点击上传</el-button>
@@ -243,6 +249,9 @@ import axios from 'axios'
         addDialogVisible: false,
         editQuestion:false,
         currentPage:1,
+        filelist:[],
+        editfilelist:[],
+        editid:'',
         pagesize:10,
         formInline: {
           name: ''
@@ -354,12 +363,11 @@ import axios from 'axios'
           .then(function(res){
             res = res.data;
             if(res.status = true){
-              alert("添加成功");
+              this.$message.success(res.msg);
             }
           })
           .catch(function(err){
-            console.log(err);
-            alert("添加失败，请检查信息");
+            this.$message.error(err);
           });
         }
         if(this.form.region == 'admiring'){
@@ -374,12 +382,11 @@ import axios from 'axios'
           .then(function(res){
           res = res.data;           
             if(res.status = true){
-              alert("添加成功");
+              this.$message.success(res.msg);
             }
           })
           .catch(function(err){
-            console.log(err);
-            alert("添加失败，请检查信息");
+            this.$message.error(err);
           });
         }
         if(this.form.region == 'judge'){
@@ -398,12 +405,11 @@ import axios from 'axios'
           res = res.data;
             console.log(res);
             if(res.status = true){
-              alert("添加成功");
+              this.$message.success(res.msg)
             }
           })
           .catch(function(err){
-            console.log(err);
-            alert("添加失败，请检查信息");
+            this.$message.error(err)          
           });
         }
       },
@@ -454,7 +460,7 @@ import axios from 'axios'
         return row.type === value;
       },
       handleEdit(index, row) {
-        console.log(row);
+        this.editid = row.id
         this.editQuestion = true;
         this.newform.region = row.type == 0? '选择题':row.type== 1 ? '判断题': '欣赏题';
         this.newform.desc = row.question;
@@ -467,46 +473,66 @@ import axios from 'axios'
           var rightarr = new Array('F','T');
           this.$set(this.newform,'answer',rightarr[parseInt(row.answer)]);
         }else{
-          var rightarr = new Array(0,'A','B','C','D');
-          this.$set(this.newform,'answer',rightarr[parseInt(row.answer)]);
+//          var rightarr = new Array(0,'A','B','C','D');
+          this.$set(this.newform,'answer',row.answer);
         }
         this.newform.analysis = row.analysis;
       },
+      fileChange(file, fileList){
+        this.filelist = fileList.slice(-3)
+      },
+      handleChange(file, fileList){
+        this.editfilelist = fileList.slice(-3)
+      },
+      removefile(file){
+        this.filelist = []
+      },
+      removeEditfile(file){
+        this.editfilelist = [];
+      },
+
       editSubmit(){
         console.log(this.newform.answer);
-        var type = this.form.region == 'choice'?'0':this.form.region == 'judge'?'1':'2';
-        var question = this.newform.desc;
-        var option = this.newform.order;
-        if(this.newform.answer == 'T'){
-          var answer = 1;
-        }else if(this.newform.answer == 'F'){
-          var answer = 0;
+        console.log(this.editfilelist);
+        if(this.editfilelist.length){
+          //有文件时
+          this.$refs.editupload.submit();
         }else{
-          var answer = this.newform.answer;
-        }
-        var analysis = this.newform.analysis;
-        this.param.set('type', type);
-        this.param.set('question', question);
-        this.param.set('option', option);
-        this.param.set('answer', answer);
-        this.param.set('analysis', analysis);
-        let config = {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        };
-        //然后通过下面的方式把内容通过axios来传到后台
-        axios.post(API_HOST+"Poetry/Update", this.param, config)
-        .then(function(res) {
-          res = res.data;
-          if(res.status == true){
-            alert('修改成功');
+          //没有文件时
+          var type = this.newform.region == '选择题'?'0':this.newform.region == '判断题'?'1':'2';
+          var question = this.newform.desc;
+          var option = this.newform.order;
+          var id = this.editid
+          if(this.newform.answer == 'T'){
+            var answer = 1;
+          }else if(this.newform.answer == 'F'){
+            var answer = 0;
+          }else{
+            var answer = this.newform.answer;
           }
-        })
-        .catch(function(err){
-          console.log(err);
-          alert("修改失败，请检查信息");
-        });
+          var analysis = this.newform.analysis;
+
+          let fd = new FormData()
+          fd.append('id',id)
+          fd.append('type',type)
+          fd.append('question',question)
+          fd.append('option',option)
+          fd.append('answer',answer)
+          fd.append('analysis',analysis)
+
+          this.$axios.post(API_HOST+"Poetry/UpdateN",fd)
+          .then((res) => {
+            if(res.data.status){
+              this.$message.success(res.data.msg)
+            }else{
+              this.$message.error('修改失败')
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err)
+          })
+        }
+        
       },
       handleDelete(index, row){
         axios.post(API_HOST+"Poetry/Delete",{
@@ -516,31 +542,27 @@ import axios from 'axios'
         .then(function(res) {
           res = res.data;
           if(res.status == true){
-            alert('删除成功');
+            this.$message.success(res.msg)
           }
         })
         .catch(function(err){
-          console.log(err);
-          alert("删除失败");
+          this.$message.error(err)
         });
       },
       beforeUpload(file) {
         console.log(file);
-
         //重新写一个表单上传的方法
         if(this.form.region == 'admiring'){
           this.param.append('video', file, file.name);
         }else{
           this.param.append('image', file, file.name);
-        }
-        
+        }        
       },
       //覆盖默认的上传行为
       httprequest() {
 
       },
       formatData(){//表单提交的事件
-
           var type = this.form.region == 'choice'?'0':this.form.region == 'judge'?'1':'2';
           var question = this.form.desc;
           var option = this.form.order;
@@ -561,10 +583,74 @@ import axios from 'axios'
             analysis
           }
       },
+      editformatData(){//表单提交的事件
+          var type = this.newform.region == '选择题'?0:this.newform.region == '判断题'?1:2;
+          var question = this.newform.desc;
+          var option = this.newform.order;
+          var id = this.editid
+          if(this.newform.answer == 'T'){
+            var answer = 1;
+          }else if(this.newform.answer == 'F'){
+            var answer = 0;
+          }else{
+            var answer = this.newform.answer;
+          }
+          var analysis = this.newform.analysis;
+          
+          return {
+            type,
+            id,
+            question,
+            option,
+            answer,
+            analysis
+          }
+      },
       onSubmit() {
-        this.$refs.upload.submit();
-      }
+        if(!this.form.region || !this.form.desc || !this.form.order || !this.form.answer || !this.form.analysis){
+          this.$message.error('请完整的填写信息')
+          return false
+        }
+        if(this.filelist.length){
+          this.$refs.upload.submit();
+        }else{
+          var type = this.form.region == 'choice'?'0':this.form.region == 'judge'?'1':'2';
+          var question = this.form.desc;
+          var option = this.form.order;
+          if(this.form.answer == 'T'){
+            var answer = 1;
+          }else if(this.form.answer == 'F'){
+            var answer = 0;
+          }else{
+            var answer = this.form.answer;
+          }
+          var analysis = this.form.analysis;
 
+          let fd = new FormData()
+          fd.append('type',type)
+          fd.append('question',question)
+          fd.append('option',option)
+          fd.append('answer',answer)
+          fd.append('analysis',analysis)
+
+
+          this.$axios.post(API_HOST+"Poetry/Add", fd,{
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
+          })
+          .then((res) => {
+            if(res.data.status){
+              this.$message.success(res.data.msg)
+            }else{
+              this.$message.error('添加失败')
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err)
+          })
+        }
+      }
     },
     mounted(){
       this.getQuestion();
