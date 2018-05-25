@@ -641,7 +641,7 @@ import axios from 'axios'
           fd.append('analysis',analysis)
 
 
-          this.$axios.post(API_HOST+"Poetry/Add", {
+          this.$axios.post(API_HOST+"Poetry/AddN", {
             type:type,
             question:question,
             option:option,
