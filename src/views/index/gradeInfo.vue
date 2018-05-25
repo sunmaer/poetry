@@ -1,7 +1,7 @@
 <template>
   <el-card class="grade">
     <div slot="header" class="clearfix">
-      <span>成绩统计</span>
+      <span>成绩统计(未实装)</span>
       <el-button style="float: right; padding: 3px 0" type="text"><i class="fa fa-bar-chart"></i></el-button>
     </div>
     <div id="chartBar" style="width:100%; height:330px;"></div>

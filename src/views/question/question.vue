@@ -428,7 +428,6 @@ import axios from 'axios'
         this.$axios.get(API_HOST+'QuestionList')
         .then(function(res){
           res = res.data;
-          console.log(res);
           if(res.status == true){
             for(var i=0;i<res.data.choice.length;i++){
               newNode = res.data.choice[i];
@@ -492,8 +491,10 @@ import axios from 'axios'
       },
 
       editSubmit(){
-        console.log(this.newform.answer);
-        console.log(this.editfilelist);
+        if(!this.newform.desc || !this.newform.desc || !this.newform.answer || !this.newform.analysis){
+          this.$message.error('请完整的填写信息')
+          return false
+        }
         if(this.editfilelist.length){
           //有文件时
           this.$refs.editupload.submit();

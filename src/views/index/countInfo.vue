@@ -76,6 +76,9 @@ import axios from 'axios'
           .catch((err) => {
             this.$message.error(err);
           });
+        }else{
+          this.$message.error('不得为空')
+          return false
         }
       }
     }
