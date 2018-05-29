@@ -8,6 +8,7 @@ import 'font-awesome/css/font-awesome.css'
 import App from './App'
 import router from './router/router'
 import axios from 'axios'
+import 'babel-polyfill'
 
 Vue.prototype.$axios = axios
 Vue.use(ElementUI)
