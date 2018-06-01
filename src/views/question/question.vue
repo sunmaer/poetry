@@ -615,9 +615,11 @@ import axios from 'axios'
           }
       },
       onSubmit() {
-        if(!this.form.region || !this.form.desc || !this.form.order || !this.form.answer || !this.form.analysis){
-          this.$message.error('请完整的填写信息')
-          return false
+        if(!this.form.region || !this.form.desc || !this.form.answer || !this.form.analysis){
+          if(this.form.region != 'judge' && !this.form.option){
+            this.$message.error('请完整的填写信息')
+            return false
+          }
         }
         if(this.filelist.length){
           this.$refs.upload.submit();
