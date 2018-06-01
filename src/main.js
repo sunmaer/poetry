@@ -9,12 +9,14 @@ import App from './App'
 import router from './router/router'
 import axios from 'axios'
 import 'babel-polyfill'
+import promise from 'es6-promise'
 
 Vue.prototype.$axios = axios
 Vue.use(ElementUI)
 Vue.use(Vuex)
 Vue.config.productionTip = false
 window.API_HOST = process.env.API_HOST
+promise.polyfill()
 
 /* eslint-disable no-new */
 new Vue({

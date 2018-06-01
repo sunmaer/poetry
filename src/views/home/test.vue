@@ -67,10 +67,10 @@
           <h3>三、欣赏题（共{{admiringNum}}题，每题{{100 / +total}}分。请欣赏完作品后完成选项，每题只有一个答案是正确的，请从四个备选答案中选出正确选项）</h3>
           <el-row v-for="(admiring,index) in admiring" :key="index" class="question__item">
             <h4>{{index+1}}. {{admiring.question}}</h4>
-            <div v-if="admiring.image" class="test__image">
-              <img :src="'//' + admiring.image" alt="古诗配图">
+            <div v-if="isimage[index]" class="test__image">
+              <img :src="admiring.video" alt="古诗配图" :onerror="errorImg"  @click="enlarge(admiring.video)">
             </div>
-            <div v-if="admiring.video" class="test__video">
+            <div v-if="isvideo[index]" class="test__video">
               <video-player  class="video-player-box"
                   ref="videoPlayer"
                   :options="playerOptions[index]"
@@ -142,9 +142,12 @@
 
 <script>
 import axios from 'axios'
+import 'babel-polyfill'
 import 'video.js/dist/video-js.css'
 import videojs from 'video.js'
 import { videoPlayer } from 'vue-video-player'
+
+
 
 export default {
   data () {
@@ -192,6 +195,8 @@ export default {
       admiringAnswer: [],
       admiringAnswerAna: [],
       playerOptions: [],
+      isimage:[],
+      isvideo:[],
       errorImg: 'this.src="' + require('../../assets/seize.jpg') + '"'
     }
   },
@@ -210,7 +215,7 @@ export default {
       url: `${API_HOST}Poetry/Library`,
       data: {
         num: [this.choiceNum, this.judgeNum, this.admiringNum]
-      }
+      },
     }).then((res) => {
       if(res.data.status) {
         this.choice = res.data.data.choice
@@ -226,8 +231,28 @@ export default {
         this.admiring = res.data.data.admiring
         for(var i = 0; i < this.admiring.length; i++){
           if(this.admiring[i].video){
+            var flag = false;
+            var arr = ["jpg","png","gif","bmp","jpeg"];
             var url = this.admiring[i].video;
             url = url.substr(0,7).toLowerCase() == "http://" ? url : "http://" + url;
+            this.admiring[i].video = url
+            //判断是视频还是图片
+            var index = url.lastIndexOf('.')
+            var ext = url.substr(index+1)
+            for(var j = 0;j < arr.length; j++){
+              if(ext == arr[j])
+              {
+                flag = true; //一旦找到合适的，立即退出循环
+                break;
+              }
+            }
+            if(flag){
+              this.isimage.push(true)
+              this.isvideo.push(false)
+            }else{
+              this.isimage.push(false)
+              this.isvideo.push(true)
+            } 
           }
           var videoNode = {
             // videojs options
@@ -246,6 +271,7 @@ export default {
         this.$message.error(res.data.msg)
       }
     }).catch((err) => {
+      console.log(err);
       this.$message.error(`题库获取失败 ${err}`)
     })
   },
