@@ -32,7 +32,7 @@
     "font-awesome": "^4.7.0",
     "js-polyfills": "^0.1.42",
     "node-sass": "^4.9.0",
-    "video.js": "^7.0.2",
+    "video.js": "^7.0.3",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vue-video-player": "^5.0.2",
