@@ -332,6 +332,11 @@ export default {
           this.$message.error(res.data.msg)
         } else {
           this.$message.success(res.data.msg)
+          this.LoginVisible = false
+          this.isLogin = true
+          this.name = this.registerForm.name
+          this.class = this.registerForm.class
+          this.id = this.registerForm.id
         }
       }).catch((err) => {
         this.$message.error(`注册失败 ${err}`)

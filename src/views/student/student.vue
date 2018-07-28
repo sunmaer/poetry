@@ -7,6 +7,7 @@
       <el-form-item class="form__item">
         <el-button type="primary" @click="search">查询</el-button>
         <el-button type="primary" @click="addDialogVisible = true">新增</el-button>
+        <el-button type="primary" @click="export2Excel">导出</el-button>
       </el-form-item>
     </el-form>
 
@@ -242,7 +243,36 @@ import axios from 'axios'
         .catch((err) => {
           this.$message.error(`更新失败 ${err}`);
         });
-      }
+      },
+      formatJson(filterVal, jsonData) {
+    　　　　return jsonData.map(v => filterVal.map(j => v[j]))
+    　　},
+      export2Excel() {
+        var excelData = new Array()
+
+        this.tableData3.forEach(function(value,index){
+          for(var i=0;i<value.grade.length;i++){
+            var newNode = new Array()
+            newNode.id = value.id
+            console.log(value.grade[i])
+            newNode.name = value.name
+            newNode.class = value.class
+            newNode.times = value.grade[i][2]
+            newNode.date = value.grade[i][1]
+            newNode.grade = value.grade[i][0]
+            excelData.push(newNode)
+            console.log(excelData)
+          }
+        })
+  　　　　require.ensure([], () => {
+  　　　　　　const { export_json_to_excel } = require('../../vendor/Export2Excel');
+  　　　　　　const tHeader = ['学号','姓名','班级','测试次数','成绩','测试时间'];
+  　　　　　　const filterVal = ['id', 'name', 'class', 'times', 'grade', 'date' ];
+  　　　　　　const list = excelData;
+  　　　　　　const data = this.formatJson(filterVal, list);
+  　　　　　　export_json_to_excel(tHeader, data, '学生成绩列表');
+  　　　　})
+    　 }
     }
   }
 </script>

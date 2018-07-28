@@ -5,7 +5,14 @@
         <i :class="['fa', 'fa-'+icon, 'fa-2x']"></i>
       </el-col>
       <el-col :span="16">
-        <el-row v-if="input" class="count__input"><el-input v-model="number" placeholder="请输入"></el-input></el-row>
+        <el-row v-if="input" class="count__input">
+          <el-select v-model="number" placeholder="请选择">
+            <el-option label="10" value="10"></el-option>
+            <el-option label="20" value="20"></el-option>
+            <el-option label="25" value="25"></el-option>
+            <el-option label="50" value="50"></el-option>
+          </el-select>
+        </el-row>
         <el-row v-else class="count__number" :style="{ color: bgColor }">{{ number }}</el-row>
         <el-row class="count__types">
           {{ type }}

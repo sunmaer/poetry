@@ -8,7 +8,38 @@
         <el-button type="primary" @click="search()">查询</el-button>
         <el-button type="primary" @click="addDialogVisible = true">新增</el-button>
       </el-form-item>
+      <el-form-item class="form__item">
+        <el-form-item label="当前题库">
+          <el-select v-model="formInline.library" @change="getQuestion">
+            <el-option label="越韵古诗" value="越韵古诗"></el-option>
+            <el-option label="越剧知识" value="越剧知识"></el-option>
+            <el-option label="其他知识" value="其他知识"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form-item>
+      <el-form-item class="form__item">
+        <el-form-item label="所选题库">
+          <span>{{formInline.libraryName}}</span>
+          <el-button type="primary" @click="changeLibrary">修改</el-button>
+        </el-form-item>
+      </el-form-item>
     </el-form>
+
+    <el-dialog
+      title="修改所选题库"
+      :visible.sync="libraryVisible"
+      width="30%"
+      :before-close="handleClose">
+      <el-select v-model="formInline.chooseLibrary">
+        <el-option label="越韵古诗" value="越韵古诗"></el-option>
+        <el-option label="越剧知识" value="越剧知识"></el-option>
+        <el-option label="其他知识" value="其他知识"></el-option>
+      </el-select>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="libraryVisible = false">取 消</el-button>
+        <el-button type="primary" @click="libraryVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
 
     <el-table
       ref="multipleTable"
@@ -254,8 +285,12 @@ import axios from 'axios'
         editid:'',
         pagesize:10,
         formInline: {
-          name: ''
+          name: '',
+          library:'越韵古诗',
+          libraryName:'',
+          chooseLibrary:'',
         },
+        libraryVisible:false,
         isjudge:false,
         isUploadShow: false,  // 是否显示upload组件
         supportWebp: false,   // 是否支持webp
@@ -413,6 +448,16 @@ import axios from 'axios'
           });
         }
       },
+      getLibrary:function(){
+        let self = this
+        this.$axios.get(API_HOST+'Global/Index')
+        .then(function(res){
+          if(res.data.status == true){
+            self.formInline.library = '越韵古诗'
+            self.formInline.libraryName = res.data.libraryName
+          }
+        })
+      },
       getQuestion:function(){
         var questionArray = new Array();
         var newNode = new Array({
@@ -425,7 +470,7 @@ import axios from 'axios'
           image:''
         });
         let self = this;
-        this.$axios.get(API_HOST+'QuestionList')
+        this.$axios.get(API_HOST+'QuestionList?name='+this.formInline.library)
         .then(function(res){
           res = res.data;
           if(res.status == true){
@@ -448,6 +493,10 @@ import axios from 'axios'
             self.oldtableData = self.tableData3;
           }
         })
+      },
+      changeLibrary: function(){
+        this.formInline.chooseLibrary = this.formInline.libraryName
+        this.libraryVisible = true
       },
       handleSizeChange: function (size) {
         this.pagesize = size;
@@ -504,6 +553,7 @@ import axios from 'axios'
           var question = this.newform.desc;
           var option = this.newform.order;
           var id = this.editid
+          var name = this.formInline.library
           if(this.newform.answer == 'T'){
             var answer = 1;
           }else if(this.newform.answer == 'F'){
@@ -522,6 +572,7 @@ import axios from 'axios'
           fd.append('analysis',analysis)
 
           this.$axios.post(API_HOST+"Poetry/UpdateN",{
+            name:name,
             id:id,
             type:type,
             question:question,
@@ -574,6 +625,7 @@ import axios from 'axios'
           var type = this.form.region == 'choice'?'0':this.form.region == 'judge'?'1':'2';
           var question = this.form.desc;
           var option = this.form.order;
+          var name = this.formInline.library
           if(this.form.answer == 'T'){
             var answer = 1;
           }else if(this.form.answer == 'F'){
@@ -584,6 +636,7 @@ import axios from 'axios'
           var analysis = this.form.analysis;
           
           return {
+            name,
             type,
             question,
             option,
@@ -665,6 +718,7 @@ import axios from 'axios'
       }
     },
     mounted(){
+      this.getLibrary();
       this.getQuestion();
       this.param = new FormData();
     }
